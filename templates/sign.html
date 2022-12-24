@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <title>Login Page</title>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Word_Card</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="index">Home</a>
+            </li>
+            <!--<li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>-->
+          </ul><!--
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>-->
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Sign In</a>
+            </li>
+          </ul>
+        </div>
+    </nav>
+    <!-- Login Form -->
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-6 mx-auto">
+          <div class="card">
+            <div class="card-header">
+              <h3>Login/registre</h3>
+            </div>
+            <div class="card-body">
+              <form id="login_from">
+                <div class="form-group">
+                  <label for="email">Email address</label>
+                  <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                  <small id="emailHelp" class="form-text text-muted">please enter your email.</small>
+                </div>
+                <!--<a href="home.html" class="btn btn-primary">Sign In</a>-->
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!--<script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>-->
+    <!--<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>-->
+    
+    <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.16.6/dist/umd/popper.min.js" integrity="sha384-7hT2D0kzuQbI8+yuiVdZuwce3xC7d+LoOIY+YXZgek9Oa9Dy8BGv+20tbJwDlMV" crossorigin="anonymous"></script>-->
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script>
+      function start(){
+        if(localStorage.getItem("word_card_email")!= null){
+          location.href='home'
+        }
+        $("#email").on("blur", mail_listen);
+      }
+      
+      function mail_listen(){
+        let str="";
+        if($('#email').val()==""){
+          str  = "<div class='form-group'>                                                             ";     
+          str += "  <label for='email'>Email address(請勿刪除)</label>                                           ";   
+          str += "  <input type='email' class='form-control' id='email' aria-describedby='emailHelp'>  ";       
+          str += "  <small id='emailHelp' class='form-text text-muted'>please enter your email.</small>";          
+          str += "</div>                                                                               ";
+          $("#login_from").html(str);
+          $("#email").on("blur", mail_listen); 
+                                                                                            
+        }
+        else{
+          $.ajax({
+            url: "http://218.161.40.232:8080/have_user",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ 'email': $('#email').val()}),
+            success: function(response) {
+              if (response["message"] == "true"){
+                alert( "此信箱已註冊，可直接進行登入");
+                str = "<div class='form-group'>                                                                                        ";           
+                str+= "  <label for='email'>Email address</label>                                                                      ";     
+                str+= "  <input type='email' class='form-control' id='email' aria-describedby='emailHelp' value="+$('#email').val()+"> ";                    
+                str+= "</div>                                                                                                          ";  
+                str+= "<div class='form-group'>                                                                                        ";    
+                str+= "  <label for='password'>Password</label>                                                                        ";        
+                str+= "  <input type='password' class='form-control' id='password'>                                                    ";
+                str+= "  <small id='emailHelp' class='form-text text-muted'>please enter your password.</small>                        ";          
+                str+= "</div>                                                                                                          ";        
+                str+= "<div class='form-group form-check'>                                                                             ";      
+                str+= "  <input type='checkbox' class='form-check-input' id='rememberMe'>                                              ";          
+                str+= "  <label class='form-check-label' for='rememberMe'>Remember me</label>                                          ";                
+                str+= "</div>                                                                                                          ";        
+                str+= "<button type='submit' class='btn btn-primary' >Sign In</button>                                                 ";
+                $("#login_from").html(str);
+                $("#email").on("blur", mail_listen);  
+                $("#login_from").submit(function(e){
+                  login(e);
+                });
+              }
+              else{
+                alert( "此信箱尚未註冊，開始進行註冊");
+                str = "<div class='form-group'>                                                                                         ";           
+                str+= "  <label for='email'>Email address</label>                                                                       ";     
+                str+= "  <input type='email' class='form-control' id='email' aria-describedby='emailHelp' value="+$('#email').val()+">  ";                    
+                str+= "</div>                                                                                                           ";  
+                str+= "<div class='form-group'>                                                                                         ";    
+                str+= "  <label for='password'>New Password</label>                                                                     ";        
+                str+= "  <input type='password' class='form-control' id='password'>                                                     ";
+                str+= "  <small id='emailHelp' class='form-text text-muted'>please enter your new password.</small>                     ";          
+                str+= "</div>                                                                                                           ";        
+                //str+= "<div class='form-group form-check'>                                                                            ";      
+                //str+= "  <input type='checkbox' class='form-check-input' id='rememberMe'>                                             ";          
+                //str+= "  <label class='form-check-label' for='rememberMe'>Remember me</label>                                         ";                
+                //str+= "</div>                                                                                                         ";        
+                str+= "<button type='submit' class='btn btn-primary' >register</button>                                                 ";
+                $("#login_from").html(str);
+                $("#email").on("blur", mail_listen);   
+                $("#login_from").submit(function(e){
+                  register(e);
+                });
+              }
+            }
+          });
+          function login(e){
+            //alert("login")
+            $.ajax({
+              url: "http://218.161.40.232:8080/login",
+              type: "POST",
+              contentType: "application/json",
+              data: JSON.stringify({ 'email': $('#email').val() , 'password': $('#password').val()}),
+              success: function(response) {
+                if(response["message"]=="successful"){
+                  localStorage.setItem("word_card_email", $('#email').val());
+                  localStorage.setItem("word_card_token", response["token"]);
+                  alert("登入成功");
+                  location.href='home'
+                }
+                else{
+                  alert("發生錯誤，請重新輸入");
+                }
+              }
+            });
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+          }
+          function register(e){
+            //alert("regoster")
+            $.ajax({
+              url: "http://218.161.40.232:8080/register",
+              type: "POST",
+              contentType: "application/json",
+              data: JSON.stringify({ 'email': $('#email').val() , 'password': $('#password').val()}),
+              success: function(response) {
+                if(response["message"]=="successful"){
+                  localStorage.setItem("word_card_email", $('#email').val());
+                  localStorage.setItem("word_card_token", response["token"]);
+                  alert("登入成功")
+                  location.href='home'
+                }
+                else{
+                  alert("密碼錯誤，請重新輸入");
+                }
+              }
+            });
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+          }
+        }
+      }
+
+      $(document).ready(start);
+    </script>
+  </body>
+</html>
+
