@@ -20,7 +20,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="index">Home</a>
+              <a class="nav-link" href="/">Home</a>
             </li>
             <!--<li class="nav-item">
               <a class="nav-link" href="#">About</a>
@@ -99,7 +99,7 @@
         }
         else{
           $.ajax({
-            url: "http://218.161.40.232:8080/have_user",
+            url: "/have_user",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({ 'email': $('#email').val()}),
@@ -153,7 +153,7 @@
           function login(e){
             //alert("login")
             $.ajax({
-              url: "http://218.161.40.232:8080/login",
+              url: "/login",
               type: "POST",
               contentType: "application/json",
               data: JSON.stringify({ 'email': $('#email').val() , 'password': $('#password').val()}),
@@ -165,7 +165,7 @@
                   location.href='home'
                 }
                 else{
-                  alert("發生錯誤，請重新輸入");
+                  alert("密碼錯誤，請重新輸入");
                 }
               }
             });
@@ -174,7 +174,7 @@
           function register(e){
             //alert("regoster")
             $.ajax({
-              url: "http://218.161.40.232:8080/register",
+              url: "/register",
               type: "POST",
               contentType: "application/json",
               data: JSON.stringify({ 'email': $('#email').val() , 'password': $('#password').val()}),
@@ -186,7 +186,7 @@
                   location.href='home'
                 }
                 else{
-                  alert("密碼錯誤，請重新輸入");
+                  alert("發生錯誤，請重新輸入");
                 }
               }
             });
