@@ -103,7 +103,7 @@
             $(document).ready(start);
             function start(){
                 if(localStorage.getItem("word_card_email")== null){
-                    // location.href='sign';
+                    location.href='sign';
                 }
                 token_verify();
                 $("#login_out").on("click", login_out);
