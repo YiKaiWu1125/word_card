@@ -52,6 +52,8 @@
         <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
         <script>
+            let lab_name="";
+            let lab_file=NaN;
             $(document).ready(start);
             function start(){
                 if(localStorage.getItem("word_card_email")== null){
@@ -59,8 +61,10 @@
                 }
                 token_verify();
                 $("#login_out").on("click", login_out);
-                let lab_name = {{ _lab_name|tojson }};
-                alert(lab_name);
+                lab_name = {{ _lab_name|tojson }};
+                console.log("lab_name is: "+lab_name);
+                get_lab_word();
+                //alert(lab_name);
             }
             function login_out(){
               $.ajax({
@@ -88,6 +92,21 @@
                         }
                     }
                 });
+            }
+            function get_lab_word(){
+                $.ajax({
+                url: "/get_lab",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") , 'name' : lab_name}),
+                success: function(response) {
+                    for(let i=0;i<response["number"];i++){
+                        console.log(response[String("word_"+i)],response[String("define_"+i)]);
+                    }
+                    lab_file=response;
+                    console.log(lab_file);
+                }
+            });
             }
         </script>
     </body>
