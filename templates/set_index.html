@@ -44,6 +44,56 @@
                 </ul>
             </div>
         </nav>
+        <div class="container mt-5">
+            <!-- Dropdown Menu for Levels -->
+            <form>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Select Word Label</label>
+                    <select class="form-control" id="nameinput">
+                    </select>
+                </div>
+            </form>
+        
+            <!-- Mode Cards with Images -->
+            <div class="card-group mt-3">
+                    <div class="card">
+                    <img src="/static/fix.png" class="card-img-top" alt="Mode 1">
+                    <div class="card-body">
+                        <h5 class="card-title">單詞卡模式</h5>
+                        <p class="card-text">Description of Mode 1</p>
+                        <a href="flash_card" class="btn btn-primary">Play</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="/static/fix.png" class="card-img-top" alt="Mode 2">
+                    <div class="card-body">
+                        <h5 class="card-title">學習模式</h5>
+                        <p class="card-text">Description of Mode 2</p>
+                        <a href="learn" class="btn btn-primary">Play</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-group mt-3">
+                <div class="card">
+                    <img src="/static/fix.png" class="card-img-top" alt="Mode 3">
+                    <div class="card-body">
+                        <h5 class="card-title">測試模式</h5>
+                        <p class="card-text">Description of Mode 3</p>
+                        <a href="quiz" class="btn btn-primary">Play</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="/static/fix.png" class="card-img-top" alt="Mode 4">
+                    <div class="card-body">
+                        <h5 class="card-title">配對模式</h5>
+                        <p class="card-text">Description of Mode 4</p>
+                        <a href="match" class="btn btn-primary">Play</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
       
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -56,6 +106,7 @@
                     location.href='sign';
                 }
                 $("#login_out").on("click", login_out);
+                loading_labname();
             }
             function login_out(){
               $.ajax({
@@ -69,6 +120,21 @@
                 }
               });
             }
+            function loading_labname(){
+                    $.ajax({
+                        url: "/lab_name",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") }),
+                        success: function(response) {
+                            console.log(response[0]["name"]);
+                            for(let i in response){
+                                $("#nameinput").append("<option value="+response[i]['name']+">"+response[i]["name"]+"</option>");
+                            }
+                            $("#nameinput").on("blur", update_word); 
+                        }
+                    });
+                }
         </script>
     </body>
 </html>

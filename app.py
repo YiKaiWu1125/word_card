@@ -183,9 +183,6 @@ def fix():
         return jsonify({"message": "false"})
 
 
-
-
-
 @app.route("/")
 def web_index():
     return render_template("index.html")
@@ -209,70 +206,23 @@ def web_modify_set():
 @app.route("/set_index")
 def web_set_index():
     return render_template("set_index.html")
-    
-#@app.route('/check', methods=['GET'])
-#def get_check():
-#    user = users_collection.find_one({})
-#    print(user)
-#    one_to_json(user)
-#    if user is None:
-#        return jsonify({"message": "User not found"}), 404
-#    return jsonify(user)
-#
-#@app.route('/users/<int:id>', methods=['GET'])
-#def create_user(id):
-#    print("id is: " +str(id))
-#    new_user = {
-#        "email": "test54",
-#        "password": "test_name"
-#    }
-#    users_collection.insert_one(new_user)
-#    return jsonify({"message": "User created successfully"}), 201
-#email password
-#def get_users():
-#    users = list(users_collection.find({}))
-#    return jsonify(users)
 
-## A route to return a specific user based on their id
-#@app.route('/users/<int:id>', methods=['GET'])
-#def get_user(id):
-#    print(id)
-#    user = users_collection.find_one({"id": id})
-#    if user is None:
-#        return jsonify({"message": "User not found"}), 404
-#    return jsonify(user)
-#
-## A route to create a new user
-#@app.route('/users', methods=['POST'])
-#def create_user():
-#    data = request.get_json()
-#    new_user = {
-#        "id": data["id"],
-#        "name": data["name"],
-#        "age": data["age"]
-#    }
-#    users_collection.insert_one(new_user)
-#    return jsonify({"message": "User created successfully"}), 201
-#
-## A route to update an existing user
-#@app.route('/users/<int:id>', methods=['PUT'])
-#def update_user(id):
-#    user = users_collection.find_one({"id": id})
-#    if user is None:
-#        return jsonify({"message": "User not found"}), 404
-#    data = request.get_json()
-#    users_collection.update_one({"id": id}, {"$set": data})
-#    return jsonify({"message": "User updated successfully"}), 200
-#
-## A route to delete a user
-#@app.route('/users/<int:id>', methods=['DELETE'])
-#def delete_user(id):
-#    user = users_collection.find_one({"id": id})
-#    if user is None:
-#        return jsonify({"message": "User not found"}), 404
-#    users_collection.delete_one({"id": id})
-#    return jsonify({"message": "User deleted successfully"}), 200
-#
+@app.route("/flash_card")
+def web_flash_card():
+    return render_template("flash_card.html")
+
+@app.route("/learn")
+def web_learn():
+    return render_template("learn.html")
+
+@app.route("/quiz")
+def web_quiz():
+    return render_template("quiz.html")
+
+@app.route("/match")
+def web_match():
+    return render_template("match.html")
+
 if __name__ == '__main__':
     #from waitress import serve
     #serve(app, host="0.0.0.0", port=8080)
