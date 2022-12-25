@@ -61,7 +61,7 @@
                     <div class="card-body">
                         <h5 class="card-title">單詞卡模式</h5>
                         <p class="card-text">Description of Mode 1</p>
-                        <a href="flash_card" class="btn btn-primary">Play</a>
+                        <a href="flash_card" id="flash_card_a" class="btn btn-primary">Play</a>
                     </div>
                 </div>
                 <div class="card">
@@ -69,7 +69,7 @@
                     <div class="card-body">
                         <h5 class="card-title">學習模式</h5>
                         <p class="card-text">Description of Mode 2</p>
-                        <a href="learn" class="btn btn-primary">Play</a>
+                        <a href="learn" id="learn_a" class="btn btn-primary">Play</a>
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@
                     <div class="card-body">
                         <h5 class="card-title">測試模式</h5>
                         <p class="card-text">Description of Mode 3</p>
-                        <a href="quiz" class="btn btn-primary">Play</a>
+                        <a href="quiz" id="quiz_a" class="btn btn-primary">Play</a>
                     </div>
                 </div>
                 <div class="card">
@@ -87,7 +87,7 @@
                     <div class="card-body">
                         <h5 class="card-title">配對模式</h5>
                         <p class="card-text">Description of Mode 4</p>
-                        <a href="match" class="btn btn-primary">Play</a>
+                        <a href="match" id="match_a"  class="btn btn-primary">Play</a>
                     </div>
                 </div>
             </div>
@@ -105,6 +105,7 @@
                 if(localStorage.getItem("word_card_email")== null){
                     location.href='sign';
                 }
+                token_verify();
                 $("#login_out").on("click", login_out);
                 loading_labname();
             }
@@ -121,20 +122,43 @@
               });
             }
             function loading_labname(){
-                    $.ajax({
-                        url: "/lab_name",
-                        type: "POST",
-                        contentType: "application/json",
-                        data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") }),
-                        success: function(response) {
-                            console.log(response[0]["name"]);
-                            for(let i in response){
-                                $("#nameinput").append("<option value="+response[i]['name']+">"+response[i]["name"]+"</option>");
-                            }
-                            $("#nameinput").on("blur", update_word); 
+                $.ajax({
+                    url: "/lab_name",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") }),
+                    success: function(response) {
+                        console.log("response is :"+response);
+                        for(let i in response){
+                            $("#nameinput").append("<option value="+response[i]['name']+">"+response[i]["name"]+"</option>");
                         }
-                    });
-                }
+                        $("#nameinput").on("change", herf_update);
+                        herf_update();
+                    }
+                });
+            }
+            function token_verify(){
+                $.ajax({
+                    url: "/token_verify",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") }),
+                    success: function(response) {
+                        if(response["message"]!="true"){
+                            alert("帳號異常，請從新登入");
+                            localStorage.clear();
+                            location.href='/';
+                        }
+                    }
+                });
+            }
+            function herf_update(){
+                let up_name=$("#nameinput").val();
+                $('#match_a').attr("href", "match/"+up_name);
+                $('#quiz_a').attr("href", "quiz/"+up_name);
+                $('#learn_a').attr("href", "learn/"+up_name);
+                $('#flash_card_a').attr("href", "flash_card/"+up_name);
+            }
         </script>
     </body>
 </html>

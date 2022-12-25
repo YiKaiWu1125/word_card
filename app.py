@@ -27,6 +27,13 @@ def verify(email,token):
     else :
         return "false"
 
+@app.route('/token_verify', methods=['POST'])
+def token_verify():
+    data = request.get_json()
+    email = data.get('email', None)
+    token = data.get('token', None)
+    return jsonify({"message": verify(email,token)})
+
 @app.route('/have_user', methods=['POST'])
 def have_user():
     data = request.get_json()
@@ -76,7 +83,6 @@ def login():
         return jsonify({"message": "not user"})
     one_to_json(user)
     if password == user["password"] :
-        print(now_user.get("test"))
         #判斷有無重複登入(no time to do)[background can use,but logic have bug]
         #if(now_user.get(email) is None):
         #    #login successful
@@ -94,7 +100,7 @@ def login():
         return jsonify({"message": "error"})
     
 @app.route('/loginout', methods=['POST'])
-def sign():
+def loginout():
     data = request.get_json()
     email = data.get('email', None)
     token = data.get('token', None)
@@ -208,21 +214,22 @@ def web_modify_set():
 def web_set_index():
     return render_template("set_index.html")
 
-@app.route("/flash_card")
-def web_flash_card():
-    return render_template("flash_card.html")
+@app.route("/flash_card/<_lab_name_>")
+def web_flash_card(_lab_name_):
+    print(_lab_name_)
+    return render_template("flash_card.html" , _lab_name = _lab_name_)
 
-@app.route("/learn")
-def web_learn():
-    return render_template("learn.html")
+@app.route("/learn/<_lab_name_>")
+def web_learn(_lab_name_):
+    return render_template("learn.html" , _lab_name = _lab_name_)
 
-@app.route("/quiz")
-def web_quiz():
-    return render_template("quiz.html")
+@app.route("/quiz/<_lab_name_>")
+def web_quiz(_lab_name_):
+    return render_template("quiz.html" , _lab_name = _lab_name_)
 
-@app.route("/match")
-def web_match():
-    return render_template("match.html")
+@app.route("/match/<_lab_name_>")
+def web_match(_lab_name_):
+    return render_template("match.html" , _lab_name = _lab_name_)
 
 @app.route('/favicon.ico')
 def favicon():
