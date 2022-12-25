@@ -54,78 +54,153 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="nameLabel">學習集名稱</span>
                     </div>
-                    <input type="text" class="form-control" name="name" required>
+                    <select class="form-control" id="nameinput" name="name" aria-label="Default select example">
+                    </select>
+                    <!--<input type="text" class="form-control" id="nameinput" name="name" required>-->
                 </div>
                 <div class="Word">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="messageLabel">語詞</span>
-                        </div>
-                        <textarea class="form-control" name="word" rows="3" required></textarea>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="messageLabel">定義</span>
-                        </div>
-                        <textarea class="form-control" name="define" rows="3" required></textarea>
-                    </div>
+
                 </div>
                 <!-- Add Field Button -->
                 <button type="button" class="btn btn-secondary" id="addFieldButton">Add Field</button>
                 <!-- Remove Field Button -->
                 <button type="button" class="btn btn-secondary" id="removeFieldButton">Remove Field</button>
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary float-right">Submit</button>
+                <button type="submit" class="btn btn-primary float-right" id="submit">Submit</button>
             </form>
                 
             </div>
           
             <!-- Optional JavaScript -->
             <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+            <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
             <script>
-            $(document).ready(start);
-            function start(){
-                if(localStorage.getItem("word_card_email")== null){
-                    location.href='sign';
+                let fieldnumber = 0;
+                $(document).ready(start);
+                function start(){
+                    fieldnumber = 0;
+                    if(localStorage.getItem("word_card_email")== null){
+                        location.href='sign';
+                    }
+                    $("#login_out").on("click", login_out);
+                    // Add field button click handler
+                    $("#addFieldButton").click(function() {
+                        // Clone the last input group
+                        //var $newInputGroup = $(".input-group:last").clone();
+                        // Clear the input fields
+                        //$newInputGroup.find("textarea").val("");
+                        // Append the new input group to the form
+                        let str="";
+                        str += " <div class='input-group mb-3'>                                                                  ";        
+                        str += "     <div class='input-group-prepend'>                                                           ";               
+                        str += "         <span class='input-group-text' id='messageLabel'>語詞</span>                            ";                
+                        str += "     </div>                                                                                      ";  
+                        str += "     <textarea class='form-control' name='word_"+fieldnumber+"' rows='3' required></textarea>    ";           
+                        str += "     <div class='input-group-prepend'>                                                           ";       
+                        str += "         <span class='input-group-text' id='messageLabel'>定義</span>                            ";           
+                        str += "     </div>                                                                                      ";     
+                        str += "     <textarea class='form-control' name='define_"+fieldnumber+"' rows='3' required></textarea>  ";          
+                        str += " </div>                                                                                          ";      
+                        fieldnumber+=1;
+                        $(".Word").append(str);
+                    });
+                    $("#removeFieldButton").click(function() {
+                        // Remove the last input group if there is more than one
+                        if ($(".input-group").length > 2) {
+                            fieldnumber-=1;
+                            $(".input-group:last").remove();
+                        }
+                    }); 
+                    loading_labname();
                 }
-                $("#login_out").on("click", login_out);
-                // Add field button click handler
-                $("#addFieldButton").click(function() {
-                    // Clone the last input group
-                    var $newInputGroup = $(".input-group:last").clone();
-                    // Clear the input fields
-                    $newInputGroup.find("textarea").val("");
-                    // Append the new input group to the form
-                    $(".Word").append($newInputGroup);
+                $(function() {
+                    $('form').submit(function(e) {
+                        var form = document.getElementById('dynamicForm');
+                        var formData = new FormData(form);
+                        formData = Object.fromEntries(formData);
+                        formData = Object.entries(formData);
+                        formData.push(["email", localStorage.getItem("word_card_email")]);
+                        formData.push(["token", localStorage.getItem("word_card_token")]);
+                        formData.push(["number", String(fieldnumber)]);
+                        formData = Object.fromEntries(formData);
+                        formData = JSON.stringify(formData);
+                        console.log(formData);
+                        e.preventDefault();
+                        $.ajax({
+                            url: "/fix_lab",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: formData,
+                            success: function(response) {
+                                if(response["message"] == "true"){
+                                    alert("add successful");
+                                    location.href='/modify_set';
+                                }
+                                else{
+                                    alert("error");
+                                }
+                            }
+                        });
+                        // You can also send ajax request to save the form data
+                    });
                 });
-                $("#removeFieldButton").click(function() {
-                    // Remove the last input group if there is more than one
-                    if ($(".input-group").length > 2) {
-                        console.log("go in here");
-                        $(".input-group:last").remove();
-                    }
-                });
-            }
-            function login_out(){
-                $.ajax({
-                    url: "http://218.161.40.232:8080/loginout",
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token")}),
-                    success: function(response) {
-                        localStorage.clear();
-                        location.href='/';
-                    }
-                });
-            }   
-            $(function() {
-                $('form').submit(function(e) {
-                    e.preventDefault();
-                    console.log($(this));
-                    var formData = $(this).serialize();
-                    console.log(formData);
-                    // You can also send ajax request to save the form data
-                });
-            });
+                function login_out(){
+                    $.ajax({
+                        url: "/loginout",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token")}),
+                        success: function(response) {
+                            localStorage.clear();
+                            location.href='/';
+                        }
+                    });
+                }
+                function loading_labname(){
+                    $.ajax({
+                        url: "/lab_name",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") }),
+                        success: function(response) {
+                            console.log(response[0]["name"]);
+                            for(let i in response){
+                                $("#nameinput").append("<option value="+response[i]['name']+">"+response[i]["name"]+"</option>");
+                            }
+                            $("#nameinput").on("blur", update_word); 
+                        }
+                    });
+                }
+                function update_word(){
+                    $.ajax({
+                        url: "/get_lab",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") , 'name' : $('#nameinput').val()}),
+                        success: function(response) {
+                            console.log(response["number"]);
+                            console.log(response);
+                            $(".Word").html("");
+                            fieldnumber = 0;
+                            for(let i=0;i<response["number"];i++){
+                                let str="";        
+                                str += "<div class='input-group mb-3'>                                                                                  ";          
+                                str += "    <div class='input-group-prepend'>                                                                           ";         
+                                str += "        <span class='input-group-text' id='messageLabel'>語詞</span>                                            ";        
+                                str += "    </div>                                                                                                      ";       
+                                str += "    <textarea class='form-control' name='word_"+i+"' rows='3' required>"+response[String("word_"+i)]+"</textarea>    ";         
+                                str += "    <div class='input-group-prepend'>                                                                            ";     
+                                str += "        <span class='input-group-text' id='messageLabel'>定義</span>                                             ";             
+                                str += "    </div>                                                                                                       ";     
+                                str += "    <textarea class='form-control' name='define_"+i+"' rows='3' required>"+response[String("define_"+i)]+"</textarea>";        
+                                str += "</div>                                                                                                           ";
+                                $(".Word").append(str);
+                                fieldnumber+=1;
+                            }
+                        }
+                    });
+                }
             </script>
     </body>
 </html>

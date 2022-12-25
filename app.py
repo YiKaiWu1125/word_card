@@ -20,13 +20,16 @@ def list_to_json(x):
 def one_to_json(x):
     x["_id"]=str(x["_id"])
 
+def verify(email,token):
+    if now_user.get(email, None) == token and token is not None:
+        return "true"
+    else :
+        return "false"
 
 @app.route('/have_user', methods=['POST'])
 def have_user():
-    print("go in have user")
     data = request.get_json()
     email = data.get('email', None)
-    print("email is:"+str(email))
     user = users_collection.find_one({"email" : email})
     if user is None:
         response = jsonify({"message": "false"})
@@ -100,12 +103,84 @@ def sign():
     return jsonify({"message": "error"})
     
 
-## A route to return all of the available entries in the collection
-@app.route('/users', methods=['GET'])
-def get_user():
-    users = list(users_collection.find({}))
-    list_to_json(users)
-    return jsonify(users)
+@app.route('/have_lab', methods=['POST'])
+def have_lab():
+    data = request.get_json()
+    email = data.get('email', None)
+    token = data.get('token', None)
+    name = data.get('name', None)
+    if verify(email,token) == "true":
+        now_collection = db[email]
+        lab = now_collection.find_one({"name" : name})
+        if lab is None:
+            return jsonify({"message": "false"})
+        else:
+            return jsonify({"message": "true"}) 
+    else :
+        return jsonify({"message": "error"}) 
+
+@app.route('/create_lab', methods=['POST'])
+def create_lab():
+    data = request.get_json()
+    email = data.get('email', None)
+    token = data.get('token', None)
+    if verify(email,token) == "true":
+        try:
+            del data["email"]
+            del data["token"]
+            now_collection = db[email]
+            now_collection.insert_one(data)
+            return jsonify({"message": "true"}) 
+        except:
+            return jsonify({"message": "false"}) 
+    else :
+        return jsonify({"message": "false"})
+
+@app.route('/lab_name', methods=['POST'])
+def lab_name():
+    data = request.get_json()
+    email = data.get('email', None)
+    token = data.get('token', None)
+    if verify(email,token) == "true":
+        now_collection = db[email]
+        lab = list(now_collection.find({}))
+        list_to_json(lab)
+        return jsonify(lab) 
+    else :
+        return jsonify({"message": "error"}) 
+
+@app.route('/get_lab', methods=['POST'])
+def get_lab():
+    data = request.get_json()
+    email = data.get('email', None)
+    token = data.get('token', None)
+    name = data.get('name', None)
+    if verify(email,token) == "true":
+        now_collection = db[email]
+        lab = now_collection.find_one({"name" : name})
+        one_to_json(lab)
+        return jsonify(lab) 
+    else :
+        return jsonify({"message": "error"}) 
+
+@app.route('/fix_lab', methods=['POST'])
+def fix():
+    data = request.get_json()
+    email = data.get('email', None)
+    token = data.get('token', None)
+    print(data)
+    if verify(email,token) == "true":
+        try:
+            del data["email"]
+            del data["token"]
+            now_collection = db[email]
+            now_collection.delete_one({"name": str(data["name"])})
+            now_collection.insert_one(data)
+            return jsonify({"message": "true"}) 
+        except:
+            return jsonify({"message": "false"}) 
+    else :
+        return jsonify({"message": "false"})
 
 
 

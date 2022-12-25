@@ -59,7 +59,7 @@
             }
             function login_out(){
               $.ajax({
-                url: "http://218.161.40.232:8080/loginout",
+                url: "/loginout",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token")}),
