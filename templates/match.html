@@ -41,10 +41,10 @@
                   <li class="nav-item">
                     <button class="nav-link" id="login_out">Login Out</a>
                   </li>
-                </ul>
+                </ul> 
             </div>
         </nav>
-
+        <div id = "game" class = "container" height="100%"></div>
         
 
         <!-- Optional JavaScript -->
@@ -54,6 +54,10 @@
         <script>
             let lab_name="";
             let lab_file=NaN;
+
+            let definitions = [];
+            let words = [];
+
             $(document).ready(start);
             function start(){
                 if(localStorage.getItem("word_card_email")== null){
@@ -100,15 +104,18 @@
                 contentType: "application/json",
                 data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") , 'name' : lab_name}),
                 success: function(response) {
-                    for(let i=0;i<response["number"];i++){
-                        console.log(response[String("word_"+i)],response[String("define_"+i)]);
-                    }
                     lab_file=response;
                     console.log(lab_file);
+                    for(let i=0;i<response["number"];i++){
+                        words.push(response[String("word_"+i)]);
+                        definitions.push(response[String("define_"+i)]);
+                    }
+                    initIcons();
                 }
             });
             }
         </script>
+        <script src = "../static/match.js"></script>
     </body>
 </html>
   
