@@ -168,7 +168,8 @@
                             for(let i in response){
                                 $("#nameinput").append("<option value="+response[i]['name']+">"+response[i]["name"]+"</option>");
                             }
-                            $("#nameinput").on("blur", update_word); 
+                            $("#nameinput").on("change", update_word); 
+                            update_word();
                         }
                     });
                 }

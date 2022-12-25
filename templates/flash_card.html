@@ -44,6 +44,7 @@
                 </ul>
             </div>
         </nav>
+
         
 
         <!-- Optional JavaScript -->
@@ -58,6 +59,8 @@
                 }
                 token_verify();
                 $("#login_out").on("click", login_out);
+                let lab_name = {{ _lab_name|tojson }};
+                alert(lab_name);
             }
             function login_out(){
               $.ajax({
