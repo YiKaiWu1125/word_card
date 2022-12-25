@@ -1,7 +1,8 @@
-from flask import Flask, jsonify, request , render_template
+from flask import Flask, jsonify, request , render_template ,send_from_directory
 from flask_cors import CORS
 from pymongo import MongoClient
 import random 
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -222,6 +223,10 @@ def web_quiz():
 @app.route("/match")
 def web_match():
     return render_template("match.html")
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),'favicon.ico', mimetype='ststic/favicon.ico')
 
 if __name__ == '__main__':
     #from waitress import serve
