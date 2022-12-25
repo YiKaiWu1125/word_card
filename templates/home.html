@@ -99,6 +99,7 @@
             location.href='sign';
           }
           $("#login_out").on("click", login_out);
+          token_verify();
         }
         function login_out(){
           $.ajax({
@@ -111,6 +112,21 @@
               location.href='/';
             }
           });
+        }
+        function token_verify(){
+            $.ajax({
+                url: "/token_verify",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") }),
+                success: function(response) {
+                    if(response["message"]!="true"){
+                        alert("帳號異常，請從新登入");
+                        localStorage.clear();
+                        location.href='/';
+                    }
+                }
+            });
         }
       </script>
     </body>

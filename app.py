@@ -27,6 +27,13 @@ def verify(email,token):
     else :
         return "false"
 
+@app.route('/token_verify', methods=['POST'])
+def token_verify():
+    data = request.get_json()
+    email = data.get('email', None)
+    token = data.get('token', None)
+    return jsonify({"message": verify(email,token)})
+
 @app.route('/have_user', methods=['POST'])
 def have_user():
     data = request.get_json()

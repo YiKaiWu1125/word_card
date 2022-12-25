@@ -83,6 +83,7 @@
                     if(localStorage.getItem("word_card_email")== null){
                         location.href='sign';
                     }
+                    token_verify();
                     $("#login_out").on("click", login_out);
                     // Add field button click handler
                     $("#addFieldButton").click(function() {
@@ -164,7 +165,6 @@
                         contentType: "application/json",
                         data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") }),
                         success: function(response) {
-                            console.log(response[0]["name"]);
                             for(let i in response){
                                 $("#nameinput").append("<option value="+response[i]['name']+">"+response[i]["name"]+"</option>");
                             }
@@ -197,6 +197,21 @@
                                 str += "</div>                                                                                                           ";
                                 $(".Word").append(str);
                                 fieldnumber+=1;
+                            }
+                        }
+                    });
+                }
+                function token_verify(){
+                    $.ajax({
+                        url: "/token_verify",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") }),
+                        success: function(response) {
+                            if(response["message"]!="true"){
+                                alert("帳號異常，請從新登入");
+                                localStorage.clear();
+                                location.href='/';
                             }
                         }
                     });
