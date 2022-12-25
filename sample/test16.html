@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+  <title>Word Flashcards</title>
+</head>
+<body>
+  <div class="container bg-dark">
+    <!-- Word flashcard -->
+    <div id="flashcard" class="card bg-light mb-3" >
+      <div id="flashcard-front" class="card-body">
+        <p class="card-text .fs-1 text">Word</p>
+      </div>
+      <div id="flashcard-back" class="card-body" style="display: none;">
+        <p class="card-text">Definition</p>
+      </div>
+    </div>
+
+    <!-- Navigation buttons -->
+    <div class="d-flex justify-content-between">
+      <button id="prev-button" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button id="next-button" class="btn btn-secondary">
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.16.0/dist/umd/popper.min.js" integrity="sha384-ZOIYMA0QfjEeU6CHeb6tr5l6G2ZDmRdMwgDmjYG1M9X3qb8WpjRRNLg/NnjZsNv4" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  <script>
+    // Array of words and definitions
+    var flashcards = [
+      { word: "Word 1", definition: "Definition 1" },
+      { word: "Word 2", definition: "Definition 2" },
+      { word: "Word 3", definition: "Definition 3" }
+    ];
+
+    // Current flashcard index
+    var currentIndex = 0;
+
+    // Display current flashcard
+    function displayFlashcard() {
+      $('#flashcard-front').find('.card-text').text(flashcards[currentIndex].word);
+      $('#flashcard-back').find('.card-text').text(flashcards[currentIndex].definition);
+    }
+
+    // Flip flashcard when clicked
+    $('#flashcard').click(function() {
+      $('#flashcard-front').toggle();
+      $('#flashcard-back').toggle();
+    });
+
+    // Go to previous flashcard when left arrow is clicked
+    $('#prev-button').click(function() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        displayFlashcard();
+      }
+    });
+
+    // Go to next flashcard when right arrow is clicked
+    $('#next-button').click(function() {
+      if (currentIndex < flashcards.length - 1) {
+        currentIndex++;
+        displayFlashcard();
+      }
+    });
+
+    // Display initial flashcard
+    displayFlashcard();
+  </script>
