@@ -3,15 +3,6 @@ let idCount = 0;
 let draggedTarget;
 let dropTarget;
 
-let definitions = [
-    "Computer Communication and Consumer Electronics 電腦 通訊 及 消費者 電子 產品",
-    "Asymmetric Digital Subscriber 使用 電話 線 寬頻 上網 的 技術",
-    "Artificial Intelligence 人工智慧",
-    "Asynchronous JavaScript and XML Asyncing 互動 式 網頁 開發 技術",
-    "Central Processing Unit 中央處理器",
-];
-
-let words = ["3C", "ADSL", "AI", "Ajax", "CPU"];
 class Pair {
     constructor(word, definition) {
         this.word = word;
@@ -227,4 +218,4 @@ function allowDrop(event) {
     event.preventDefault();
 }
 
-window.addEventListener("load", initIcons, false);
+
