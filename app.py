@@ -19,7 +19,10 @@ def list_to_json(x):
         x[i]["_id"]=str(x[i]["_id"])
 
 def one_to_json(x):
-    x["_id"]=str(x["_id"])
+    if x is not None:
+        x["_id"]=str(x["_id"])
+    else :
+        x = {}
 
 def verify(email,token):
     if now_user.get(email, None) == token and token is not None:

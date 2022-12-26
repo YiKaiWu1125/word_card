@@ -131,6 +131,7 @@
                         formData.push(["email", localStorage.getItem("word_card_email")]);
                         formData.push(["token", localStorage.getItem("word_card_token")]);
                         formData.push(["number", String(fieldnumber)]);
+                        formData.push(["time", new Date().toUTCString()]);
                         formData = Object.fromEntries(formData);
                         formData = JSON.stringify(formData);
                         console.log(formData);
