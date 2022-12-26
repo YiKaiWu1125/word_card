@@ -226,6 +226,15 @@ def web_flash_card(_lab_name_):
 def web_learn(_lab_name_):
     return render_template("learn.html" , _lab_name = _lab_name_)
 
+@app.route("/listen/<_lab_name_>")
+def web_listen(_lab_name_):
+    return render_template("listen.html" , _lab_name = _lab_name_)
+
+@app.route("/speaker/<_lab_name_>")
+def web_speaker(_lab_name_):
+    return render_template("speaker.html" , _lab_name = _lab_name_)
+
+
 @app.route("/quiz/<_lab_name_>")
 def web_quiz(_lab_name_):
     return render_template("quiz.html" , _lab_name = _lab_name_)

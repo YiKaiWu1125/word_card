@@ -61,38 +61,54 @@
                     <div class="card-body">
                         <h5 class="card-title">單詞卡模式</h5>
                         <p class="card-text">Description of Mode 1</p>
-                        <a href="flash_card" id="flash_card_a" class="btn btn-primary">Play</a>
+                        <a href="flash_card" id="flash_card_a" class="btn btn-primary">進入模式</a>
                     </div>
                 </div>
+                <div class="card">
+                    <img src="/static/fix.png" class="card-img-top" alt="Mode 3">
+                    <div class="card-body">
+                        <h5 class="card-title">聽力測驗</h5>
+                        <p class="card-text">Description of Mode 3</p>
+                        <a href="listen" id="listen_a" class="btn btn-primary">進入模式</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="/static/fix.png" class="card-img-top" alt="Mode 4">
+                    <div class="card-body">
+                        <h5 class="card-title">口說測驗</h5>
+                        <p class="card-text">Description of Mode 4</p>
+                        <a href="speaker" id="speaker_a"  class="btn btn-primary">進入模式</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-group mt-3">
                 <div class="card">
                     <img src="/static/fix.png" class="card-img-top" alt="Mode 2">
                     <div class="card-body">
                         <h5 class="card-title">學習模式</h5>
                         <p class="card-text">Description of Mode 2</p>
-                        <a href="learn" id="learn_a" class="btn btn-primary">Play</a>
+                        <a href="learn" id="learn_a" class="btn btn-primary">進入模式</a>
                     </div>
                 </div>
-            </div>
-            <div class="card-group mt-3">
                 <div class="card">
                     <img src="/static/fix.png" class="card-img-top" alt="Mode 3">
                     <div class="card-body">
                         <h5 class="card-title">測試模式</h5>
-                        <p class="card-text">Description of Mode 3</p>
-                        <a href="quiz" id="quiz_a" class="btn btn-primary">Play</a>
+                        <p class="card-text">Description of Mode 5</p>
+                        <a href="quiz" id="quiz_a" class="btn btn-primary">進入模式</a>
                     </div>
                 </div>
                 <div class="card">
                     <img src="/static/fix.png" class="card-img-top" alt="Mode 4">
                     <div class="card-body">
                         <h5 class="card-title">配對模式</h5>
-                        <p class="card-text">Description of Mode 4</p>
-                        <a href="match" id="match_a"  class="btn btn-primary">Play</a>
+                        <p class="card-text">Description of Mode 6</p>
+                        <a href="match" id="match_a"  class="btn btn-primary">進入模式</a>
                     </div>
                 </div>
             </div>
         </div>
-
 
       
         <!-- Optional JavaScript -->
@@ -156,6 +172,8 @@
                 let up_name=$("#nameinput").val();
                 $('#match_a').attr("href", "match/"+up_name);
                 $('#quiz_a').attr("href", "quiz/"+up_name);
+                $('#listen_a').attr("href", "listen/"+up_name);
+                $('#speaker_a').attr("href", "speaker/"+up_name);
                 $('#learn_a').attr("href", "learn/"+up_name);
                 $('#flash_card_a').attr("href", "flash_card/"+up_name);
             }

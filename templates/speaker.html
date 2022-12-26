@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        
+        <title>Game Chooser</title>
+    </head>
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Word_Card</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../home">主選單列</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="../set_index">開始學習</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../create_set">建立學習集</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../modify_set">修改學習集</a>
+                    </li>
+                </ul>
+              
+                <!--<form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>-->
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                    <button class="nav-link" id="login_out">Login Out</a>
+                  </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <h1 class="text-center mb-3">口說測驗模式</h1>
+
+        <div id="display">
+            <!-- sample
+            
+            <div class = "container col-6 h-100">
+                <div class = "row">
+                    <div class = "col-12 mb-3 p-0">
+                        <div id = "speaking_5" class="card pl-1" >
+                            <div class="card-text">
+                                <small class="text-muted">請照著念</small>
+                            </div>
+                            <h5 class="card-body align-items-center text-center">Computer Communication and Consumer Electronics 電腦 通訊 及 消費者 電子 產品</h5>
+                            <div id = "speaking_area" class="card-footer bg-transparent">
+                                <div class="input-group justify-content-center">
+                                    <button type = "button" style = "border:0px;">
+                                        <img id = "microphone" src = "../static/microphone.png" style = "height:4ex;"/>
+                                    </button>
+                                  </div>             
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            -->
+            
+        </div>
+
+
+
+
+        
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <script>
+            let lab_name="";
+            let lab_file=NaN;
+            let ans = [];
+            let state = [];
+            let now = 0;
+            
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.continuous = true;
+
+            recognition.addEventListener('result', (e) => {
+              const say = Array.from(e.results)
+                .map(result => result[0])
+                .map(result => result.transcript)
+                .join('');
+                say_result(now,say);
+            });
+
+            $(document).ready(start);
+            function start(){
+                if(localStorage.getItem("word_card_email")== null){
+                    location.href='sign';
+                }
+                token_verify();
+                $("#login_out").on("click", login_out);
+                lab_name = {{ _lab_name|tojson }};
+                console.log("lab_name is: "+lab_name);
+                get_lab_word();
+
+                //alert(lab_name);
+            }
+            function login_out(){
+              $.ajax({
+                url: "/loginout",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token")}),
+                success: function(response) {
+                    localStorage.clear();
+                    location.href='/';
+                }
+              });
+            }
+            function token_verify(){
+                $.ajax({
+                    url: "/token_verify",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") }),
+                    success: function(response) {
+                        if(response["message"]!="true"){
+                            alert("帳號異常，請從新登入");
+                            localStorage.clear();
+                            location.href='/';
+                        }
+                    }
+                });
+            }
+            function get_lab_word(){
+                $.ajax({
+                url: "/get_lab",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") , 'name' : lab_name}),
+                success: function(response) {
+                    for(let i=0;i<response["number"];i++){
+                        console.log(response[String("word_"+i)],response[String("define_"+i)]);
+                    }
+                    lab_file=response;
+                    console.log(lab_file);
+                    init_card(response);
+                }
+            });
+            }
+            
+            function init_card(response){
+                for(let i=0;i<response["number"];i++){
+                    made_card(i,response[String("word_"+i)]);
+                    ans[i]=response[String("word_"+i)];
+                    state[i]="null";
+                }
+                for(let i=0;i<response["number"];i++){
+                    $("#btn_"+i).mousedown(function() {click_begin(i)});
+                    $("#btn_"+i).mouseup(function() {click_end(i)});
+                }
+            }
+
+            function made_card(number,word){
+                let str = "";
+                str += "    <div class = 'container col-6 h-100'>                                                                                                                     ";                                                                                                                
+                str += "        <div class = 'row'>                                                                                                                                   ";                                                                                                                                                                                              
+                str += "            <div class = 'col-12 mb-3 p-0'>                                                                                                                   ";                                                                                                   
+                str += "                <div id = 'speaking_5' class='card pl-1' >                                                                                                    ";                                                                                                                  
+                str += "                    <div class='card-text'>                                                                                                                   ";                                                                                                   
+                str += "                        <small class='text-muted'>請照著念</small>                                                                                             ";                                                                                                                          
+                str += "                    </div>                                                                                                                                    ";                                                                                  
+                str += "                    <h5 class='card-body align-items-center text-center'>"+word+"</h5>                                                                        ";                                                                                                                                                                                                                   
+                str += "                    <div id = 'speaking_area' class='card-footer bg-transparent'>                                                                             ";                                                                                                                                         
+                str += "                        <div class='input-group justify-content-center' id='"+"dp_"+number+"'>                                                                                      ";                                                                                                                                
+                str += "                            <button type = 'button' style = 'border:0px;' id = 'btn_"+number+"'>                                                                                    ";                                                                                                                                  
+                str += "                                <img id = 'microphone' src = '../static/microphone.png' style = 'height:4ex;'/>                                               ";                                                                                                                                                                       
+                str += "                            </button>                                                                                                                         ";                                                                                             
+                str += "                          </div>                                                                                                                              ";                                                                                                     
+                str += "                    </div>                                                                                                                                    ";                                                                                  
+                str += "                </div>                                                                                                                                        ";                                                                              
+                str += "            </div>                                                                                                                                            ";                                                                          
+                str += "        </div>                                                                                                                                                ";                                                                      
+                str += "    </div>                                                                                                                                                    ";                                                                  
+                $("#display").append(str);
+            }
+            function click_begin(number){
+                console.log(number+" is push");
+                recognition.start();
+            }
+            function click_end(number){
+                now = number;
+                console.log(number+" is pull");
+                recognition.stop();
+            }
+            function say_result(number,say){
+                if(say.toUpperCase() == ans[number].toUpperCase()){
+                    $("#dp_"+number).html("<img src = '../static/green_tick.png' style = 'height:4ex;'/> ");
+                    alert("發音正確><");
+                    state[number]="true";
+                    let bo = "true";
+                    for(let i = 0 ; i < lab_file["number"] ; i++){
+                        if(state[i] != "true"){
+                            bo = "false";
+                            break;
+                        }
+                    }
+                    if(bo == "true"){
+                        game_over();
+                    }
+                }
+                else{
+                    state[number]="false";
+                    alert("發音不正確喔QQ");
+                }
+                console.log(number+" is : "+say);
+            }
+            function game_over(){
+                alert("!!恭喜你完成本次的口說測驗!!");
+                location.href='../set_index';
+            }
+        </script>
+    </body>
+</html>
+  
