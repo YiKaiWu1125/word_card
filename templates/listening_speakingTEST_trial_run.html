@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        
+        <title>Game Chooser</title>
+    </head>
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Word_Card</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../home">主選單列</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="../set_index">開始學習</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../create_set">建立學習集</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../modify_set">修改學習集</a>
+                    </li>
+                </ul>
+              
+                <!--<form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>-->
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                    <button class="nav-link" id="login_out">Login Out</a>
+                  </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Area of testing listening skills -->
+        <div class = "container col-6 h-100">
+            <div class = "row">
+                <div class = "col-12 mb-3 p-0">
+                    <div id = "listening_1" class="card pl-1" style = "height: 280px;">
+                        <div class="card-text">
+                            <small class="text-muted">定義</small>
+                            <button type = "button" style = "border:0px;">
+                                <img src = "../static/speaker_spread_out_audio.png" style = "height:3ex;"/>
+                            </button>
+                        </div>
+                        <h5 class="card-body align-items-center text-center">Computer Communication and Consumer Electronics 電腦 通訊 及 消費者 電子 產品</h5>
+                        <div class="card-footer bg-transparent">
+                            <div class="input-group">
+                                <input type="text" class="form-control" aria-label="Listening and write your answer">
+                                <a href="#listening_2">
+                                    <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">下一題</button>
+                                </a>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class = "row">
+                <div class = "col-12 mb-3 p-0">
+                    <div id = "listening_2" class="card pl-1" style = "height: 280px;">
+                        <div class="card-text">
+                            <small class="text-muted">定義</small>
+                            <button type = "button" style = "border:0px;">
+                                <img src = "../static/speaker_spread_out_audio.png" style = "height:3ex;"/>
+                            </button>
+                        </div>
+                        <h5 class="card-body align-items-center text-center">Computer Communication and Consumer Electronics 電腦 通訊 及 消費者 電子 產品</h5>
+                        <div class="card-footer bg-transparent">
+                            <div class="input-group">
+                                <input type="text" class="form-control" aria-label="Listening and write your answer">
+                                <a href="#listening_3">
+                                    <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">下一題</button>
+                                </a>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class = "row">
+                <div class = "col-12 mb-3 p-0">
+                    <div id = "listening_4" class="card pl-1" style = "height: 280px;">
+                        <div class="card-text">
+                            <small class="text-muted">定義</small>
+                            <button type = "button" style = "border:0px;">
+                                <img src = "../static/speaker_spread_out_audio.png" style = "height:3ex;"/>
+                            </button>
+                        </div>
+                        <h5 class="card-body align-items-center text-center">Computer Communication and Consumer Electronics 電腦 通訊 及 消費者 電子 產品</h5>
+                        <div class="card-footer bg-transparent">
+                            <div class="input-group">
+                                <input type="text" class="form-control" aria-label="Listening and write your answer">
+                                <a href="#speaking_5">
+                                    <button  class="btn btn-outline-secondary my-2 my-sm-0" type="submit">下一題</button>
+                                </a>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <!-- Area of testing speaking skills -->
+        <div class = "container col-6 h-100">
+            <div class = "row">
+                <div class = "col-12 mb-3 p-0">
+                    <div id = "speaking_5" class="card pl-1" style = "height: 280px;">
+                        <div class="card-text">
+                            <small class="text-muted">詞語</small>
+                        </div>
+                        <h5 class="card-body align-items-center text-center">Computer Communication and Consumer Electronics 電腦 通訊 及 消費者 電子 產品</h5>
+                        
+                        <a href="#speaking_5">
+                            <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">下一題</button>
+                        </a>
+
+                        <div id = "speaking_area" class="card-footer bg-transparent">
+                            <div class="input-group">
+                                <button type = "button" style = "border:0px;">
+                                    <img id = "microphone" src = "../static/microphone.png" style = "height:3ex;"/>
+                                </button>
+                              </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class = "row text-center">
+                <div class = "col-12">
+                    <button class="btn btn-success my-2 my-sm-0" type="submit">提交測試</button>
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <script>
+            let lab_name="";
+            let lab_file=NaN;
+            let is_speaking = false;
+            let has_spoken = false;
+            $(document).ready(start);
+            function start(){
+                if(localStorage.getItem("word_card_email")== null){
+                    // location.href='sign';
+                }
+                $("#microphone").click(change_microphone_icon);
+                // token_verify();
+                // $("#login_out").on("click", login_out);
+                // lab_name = {{ _lab_name|tojson }};
+                // console.log("lab_name is: "+lab_name);
+                // get_lab_word();
+                //alert(lab_name);
+            }
+            function login_out(){
+              $.ajax({
+                url: "/loginout",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token")}),
+                success: function(response) {
+                    localStorage.clear();
+                    location.href='/';
+                }
+              });
+            }
+            function token_verify(){
+                $.ajax({
+                    url: "/token_verify",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") }),
+                    success: function(response) {
+                        if(response["message"]!="true"){
+                            alert("帳號異常，請從新登入");
+                            localStorage.clear();
+                            location.href='/';
+                        }
+                    }
+                });
+            }
+            function get_lab_word(){
+                $.ajax({
+                url: "/get_lab",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") , 'name' : lab_name}),
+                success: function(response) {
+                    for(let i=0;i<response["number"];i++){
+                        console.log(response[String("word_"+i)],response[String("define_"+i)]);
+                    }
+                    lab_file=response;
+                    console.log(lab_file);
+                }
+            });
+            }
+            function change_microphone_icon(){
+                if(!is_speaking) {
+                    is_speaking = true;
+                    $("#microphone").attr("src", "../static/red_square.png");
+                    return
+                }     
+                else {
+                    is_speaking = false;
+                    has_spoken = true;
+                    $("#microphone").attr("src", "../static/microphone.png");
+                    $("#has_spoken").remove();
+                }  
+                display_has_spoken_icon();
+                
+
+                function display_has_spoken_icon(){
+                    if(has_spoken && !is_speaking)
+                        return $("#speaking_area").append("<img id = 'has_spoken' src = '../static/green_tick.png' style = 'height: 3ex; float:right;'/>");
+                    else   
+                        $("#has_spoken").remove();
+                }
+            }
+        </script>
+    </body>
+</html>
+  
