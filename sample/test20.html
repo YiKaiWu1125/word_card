@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Speech-to-Text Demo</h1>
+
+<button id="startBtn">Start</button>
+<button id="stopBtn">Stop</button>
+<br><br>
+<textarea id="transcript" cols="100" rows="10"></textarea>
+
+<script>
+const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn');
+const transcript = document.getElementById('transcript');
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+
+recognition.continuous = true;
+
+startBtn.addEventListener('click', () => {
+  recognition.start();
+});
+
+stopBtn.addEventListener('click', () => {
+  recognition.stop();
+});
+
+recognition.addEventListener('result', (e) => {
+  const transcript = Array.from(e.results)
+    .map(result => result[0])
+    .map(result => result.transcript)
+    .join('');
+
+  console.log(transcript);
+  transcript.value = transcript;
+});
+</script>
+
+</body>
+</html>

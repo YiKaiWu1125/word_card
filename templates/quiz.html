@@ -44,35 +44,11 @@
                 </ul>
             </div>
         </nav>
-        <div class = "container col-6 h-100">
-            <div class = "row">
-                <div class = "col-6 mb-3 p-0">
-                    <div class="card pl-1" style = "height: 280px;">
-                        <div class="card-text">
-                            <small class="text-muted">詞語</small>
-                        </div>
-                        <h5 class="card-body align-items-center text-center">3C</h5>
-                        <div class="card-footer bg-transparent">
-                            <button class="btn btn-outline-success my-2 my-sm-0 btn-block" type="submit">對</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class = "col-6 mb-3 p-0">
-                    <div class="card pl-1" style = "height: 280px;">
-                        <div class="card-text">
-                            <small class="text-muted">定義</small>
-                        </div>
-                        <h5 class="card-body align-items-center text-center">Computer Communication and Consumer Electronics 電腦 通訊 及 消費者 電子 產品</h5>
-                        <div class="card-footer bg-transparent">
-                            <button class="btn btn-outline-danger my-2 my-sm-0 btn-block" type="submit">錯</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+        <div class = "container col-6 h-100" id="display">
+            <!-- 範例
             
             <div class = "row">
-                
                 <div class = "col-6 mb-3 p-0">
                     <div class="card pl-1" style = "height: 280px;">
                         <div class="card-text">
@@ -83,8 +59,7 @@
                             <button class="btn btn-outline-success my-2 my-sm-0 btn-block" type="submit">對</button>
                         </div>
                     </div>
-                </div>
-                
+                </div>          
                 <div class = "col-6 mb-3 p-0" style = "padding-left: 0%;">
                     <div class="card pl-1" style = "height: 280px;">
                         <div class="card-text">
@@ -98,32 +73,9 @@
                 </div>
             </div>
 
-            <div class = "row">
-                
-                <div class = "col-6 mb-3 p-0">
-                    <div class="card pl-1" style = "height: 280px;">
-                        <div class="card-text">
-                            <small class="text-muted">詞語</small>
-                        </div>
-                        <h5 class="card-body align-items-center text-center">WAP</h5>
-                        <div class="card-footer bg-transparent">
-                            <button class="btn btn-outline-success my-2 my-sm-0 btn-block" type="submit">對</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class = "col-6 mb-3 p-0" style = "padding-left: 0%;">
-                    <div class="card pl-1" style = "height: 280px;">
-                        <div class="card-text">
-                            <small class="text-muted">定義</small>
-                        </div>
-                        <h5 class="card-body align-items-center text-center">Wireless Application Protocol 無線 通訊 應用 協定</h5>
-                        <div class="card-footer bg-transparent">
-                            <button class="btn btn-outline-danger my-2 my-sm-0 btn-block" type="submit">錯</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            -->
+
+
         </div>
 
 
@@ -137,6 +89,9 @@
         <script>
             let lab_name="";
             let lab_file=NaN;
+            let ans = [];
+            let state = [];
+            let total = 0;
             $(document).ready(start);
             function start(){
                 if(localStorage.getItem("word_card_email")== null){
@@ -147,7 +102,6 @@
                 lab_name = {{ _lab_name|tojson }};
                 console.log("lab_name is: "+lab_name);
                 get_lab_word();
-                //alert(lab_name);
             }
             function login_out(){
               $.ajax({
@@ -186,10 +140,125 @@
                     for(let i=0;i<response["number"];i++){
                         console.log(response[String("word_"+i)],response[String("define_"+i)]);
                     }
-                    lab_file=response;
-                    console.log(lab_file);
+                    if(response["number"]>=1){
+                        init_card(response);
+                    }
+                    else{
+                        alert("no find data");
+                    }
+                    total=response["number"];
+                    lab_file = response;
                 }
             });
+            }
+            function click_yes(number){
+                console.log(number + "say yes");
+                $("#ac_yes_"+number).html("<button class='btn btn-outline-success my-2 my-sm-0 btn-block active' type='button' id='yes_"+number+" '>對</button> ");
+                $("#ac_no_"+number).html("<button class='btn btn-outline-danger my-2 my-sm-0 btn-block' type='button' id='no_"+number+" '>錯</button>");
+                state[number]="true";
+                let bo = "true";
+                for(let i=0;i<total;i++){
+                    if(state[i]=="null"){
+                        bo = "false";
+                        break;
+                    }
+                }
+                if (bo == "true"){
+                    game_over();
+                }
+            }
+            function click_no(number){
+                console.log(number + "say no");
+                $("#ac_yes_"+number).html("<button class='btn btn-outline-success my-2 my-sm-0 btn-block' type='button' id='yes_"+number+" '>對</button> ");
+                $("#ac_no_"+number).html("<button class='btn btn-outline-danger my-2 my-sm-0 btn-block active' type='button' id='no_"+number+" '>錯</button>");
+                state[number]="false";
+                let bo = "true";
+                for(let i=0;i<total;i++){
+                    if(state[i]=="null"){
+                        bo = "false";
+                        break;
+                    }
+                }
+                if (bo == "true"){
+                    game_over();
+                }
+            }
+            function init_card(response){
+                for(let i=0;i<response["number"];i++){
+                    console.log(response[String("word_"+i)],response[String("define_"+i)]);
+                    if(Math.random()<0.5 || response["number"] == 1){
+                        //true;
+                        made_card(i,response[String("word_"+i)],response[String("define_"+i)]);
+                        ans[i]="true";
+                    }
+                    else{
+                        //false;
+                        k = response["number"];
+                        while(k==response["number"]){
+                            k = Math.floor(Math.random() * response["number"]);
+                        }
+                        made_card(i,response[String("word_"+i)],response[String("define_"+k)]);
+                        ans[i]="false";
+                    }
+                    state[i]="null";
+                }
+                for(let i=0;i<response["number"];i++){
+                    $("#yes_"+i).on("click",function(){click_yes(i)});
+                    $("#no_"+i).on("click",function(){click_no(i)});
+                }
+            }
+            function made_card(id,word,define){
+                let str="";
+                str += " <div class = 'row'>                                                                                                            ";           
+                str += "     <div class = 'col-6 mb-3 p-0'>                                                                                             ";                   
+                str += "         <div class='card pl-1' style = 'height: 280px;'>                                                                       ";            
+                str += "             <div class='card-text'>                                                                                            ";         
+                str += "                 <small class='text-muted'>詞語</small>                                                                         ";               
+                str += "             </div>                                                                                                             ";             
+                str += "             <h5 class='card-body align-items-center text-center'>"+word+"</h5>                                                 ";                                  
+                str += "             <div class='card-footer bg-transparent' id='ac_yes_"+id+"' >                                                       ";        
+                str += "                 <button class='btn btn-outline-success my-2 my-sm-0 btn-block' type='button' id='yes_"+id+"'>對</button>       ";                             
+                str += "             </div>                                                                                                             ";    
+                str += "         </div>                                                                                                                 ";                               
+                str += "     </div>                                                                                                                     ";        
+                str += "     <div class = 'col-6 mb-3 p-0' style = 'padding-left: 0%;'>                                                                 ";            
+                str += "         <div class='card pl-1' style = 'height: 280px;'>                                                                       ";                            
+                str += "             <div class='card-text'>                                                                                            ";                                  
+                str += "                 <small class='text-muted'>定義</small>                                                                         ";                    
+                str += "             </div>                                                                                                             ";                        
+                str += "             <h5 class='card-body align-items-center text-center'>"+define+"</h5>                                               ";                        
+                str += "             <div class='card-footer bg-transparent' id='ac_no_"+id+"'' >                                                        ";                        
+                str += "                 <button class='btn btn-outline-danger my-2 my-sm-0 btn-block' type='button' id='no_"+id+"'>錯</button>         ";                                    
+                str += "             </div>                                                                                                             ";            
+                str += "         </div>                                                                                                                 ";                    
+                str += "     </div>                                                                                                                     ";                    
+                str += " </div>                                                                                                                         ";  
+                $("#display").append(str);                       
+            }
+            function game_over(){
+                let ans_true = 0;
+                let ans_false = 0;
+                let arr = [];
+                for(let i = 0 ;i<total ;i++){
+                    if(state[i]!=ans[i]){
+                        ans_false++;
+                    }
+                    else{
+                        ans_true++;
+                    }
+                }
+                if(ans_false == 0){
+                    alert("恭喜全對");
+                }
+                else{
+                    alert("一共"+total+"題，您一共答對 "+ans_true+" 題，答錯 "+ans_false+" 題，以下進行檢討");
+                    for(let i = 0; i < arr.length ;i++){
+                        alert("錯誤"+(i+1)+" , "+lab_file[String("word_"+arr[i])]+" 的正確定義為 "+lab_file[String("define_"+arr[i])]+" .");
+                    }
+                    alert("檢討完畢");
+                }
+               
+                location.href='../set_index';
             }
         </script>
     </body>
