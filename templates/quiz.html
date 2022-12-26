@@ -91,6 +91,7 @@
             let lab_file=NaN;
             let ans = [];
             let state = [];
+            let res = [];
             let total = 0;
             $(document).ready(start);
             function start(){
@@ -190,6 +191,7 @@
                         //true;
                         made_card(i,response[String("word_"+i)],response[String("define_"+i)]);
                         ans[i]="true";
+                        res[i] = response[String("define_"+i)];
                     }
                     else{
                         //false;
@@ -199,6 +201,7 @@
                         }
                         made_card(i,response[String("word_"+i)],response[String("define_"+k)]);
                         ans[i]="false";
+                        res[i] = response[String("define_"+k)];
                     }
                     state[i]="null";
                 }
@@ -242,6 +245,7 @@
                 for(let i = 0 ;i<total ;i++){
                     if(state[i]!=ans[i]){
                         ans_false++;
+                        arr.push(i);
                     }
                     else{
                         ans_true++;
@@ -252,8 +256,17 @@
                 }
                 else{
                     alert("一共"+total+"題，您一共答對 "+ans_true+" 題，答錯 "+ans_false+" 題，以下進行檢討");
+                    console.log(arr);
                     for(let i = 0; i < arr.length ;i++){
-                        alert("錯誤"+(i+1)+" , "+lab_file[String("word_"+arr[i])]+" 的正確定義為 "+lab_file[String("define_"+arr[i])]+" .");
+                        let str = "錯誤"+(i+1)+" , "+lab_file[String("word_"+arr[i])]+" 的正確定義";
+                        if(ans[i] == "true"){
+                            str+=" 確實是 ";
+                        }
+                        else{
+                            str+=" 並非是 ";
+                        }
+                        str +=  res[arr[i]] + ".";
+                        alert(str);
                     }
                     alert("檢討完畢");
                 }
