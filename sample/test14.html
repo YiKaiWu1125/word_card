@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+        <!-- 引入 Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+        <!-- 引入 Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+        <title>Game Chooser</title>
+        <style>
+            /* 定義翻轉效果 */
+            .card.flip {
+                transform: rotateY(180deg);
+            }
+        
+            /* 將正面和反面隱藏 */
+            .card .front,.card .back {
+              backface-visibility: hidden;
+            }
+        
+            /* 定義正面的樣式 */
+            .card .front {
+              /* 其他樣式 */
+            }
+        
+            /* 定義反面的樣式 */
+            .card .back {
+              /* 其他樣式 */
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-12 col-md-6 offset-md-3">
+                    <!-- 單字卡 -->
+                    <div class="card" style="height: 22rem;">
+                        <div class="card-body">
+                            <h5 class="card-title front">Word</h5>
+                            <p class="card-text front">Definition</p>
+                            <h5 class="card-title back d-none">Word</h5>
+                            <p class="card-text back d-none">Definition</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            // 存儲單字和定義
+            const words = [
+                { word: 'Word 1', definition: 'Definition 1' },
+                { word: 'Word 2', definition: 'Definition 2' },
+                { word: 'Word 3', definition: 'Definition 3' },
+            // ...
+            ];
+        
+            // 目前的單字卡索引
+            let currentIndex = 0;
+        
+            // 顯示目前的單字卡
+            function displayWord() {
+                // 取得目前的單字和定義
+                const { word, definition } = words[currentIndex];
+                // 更新單字卡內容
+                document.querySelector('.card-title.front').textContent = word;
+                document.querySelector('.card-text.front').textContent = definition;
+                document.querySelector('.card-title.back').textContent = word;
+                document.querySelector('.card-text.back').textContent = definition;
+            }
+        
+            // 切換到下一個單字卡
+            function nextWord() {
+            // 將單字卡翻回正面
+            document.querySelector('.card').classList.remove('flip');
+            // 更新單字卡索引
+            currentIndex = (currentIndex + 1) % words.length;
+        
+            // 顯示目前的單字卡
+            displayWord();
+            }
+        
+            // 監聽點擊事件
+            document.querySelector('.card').addEventListener('click', function() {
+                // 切換 .flip 類別
+                this.classList.toggle('flip');
+            });
+        
+            // 監聽滑鼠滾輪事件
+            window.addEventListener('wheel', function(event) {
+                // 如果向下滾動
+                if (event.deltaY > 0) {
+                    // 切換到下一個單字卡
+                    nextWord();
+                }
+            });
+        
+            // 顯示第一個單字卡
+            displayWord();
+        </script>
+
+    </body>
+</html>
+  

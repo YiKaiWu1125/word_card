@@ -124,6 +124,7 @@
                         formData.push(["email", localStorage.getItem("word_card_email")]);
                         formData.push(["token", localStorage.getItem("word_card_token")]);
                         formData.push(["number", String(fieldnumber)]);
+                        formData.push(["time", new Date().toUTCString()]);
                         formData = Object.fromEntries(formData);
                         formData = JSON.stringify(formData);
                         console.log(formData);
@@ -174,33 +175,35 @@
                     });
                 }
                 function update_word(){
-                    $.ajax({
-                        url: "/get_lab",
-                        type: "POST",
-                        contentType: "application/json",
-                        data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") , 'name' : $('#nameinput').val()}),
-                        success: function(response) {
-                            console.log(response["number"]);
-                            console.log(response);
-                            $(".Word").html("");
-                            fieldnumber = 0;
-                            for(let i=0;i<response["number"];i++){
-                                let str="";        
-                                str += "<div class='input-group mb-3'>                                                                                  ";          
-                                str += "    <div class='input-group-prepend'>                                                                           ";         
-                                str += "        <span class='input-group-text' id='messageLabel'>語詞</span>                                            ";        
-                                str += "    </div>                                                                                                      ";       
-                                str += "    <textarea class='form-control' name='word_"+i+"' rows='3' required>"+response[String("word_"+i)]+"</textarea>    ";         
-                                str += "    <div class='input-group-prepend'>                                                                            ";     
-                                str += "        <span class='input-group-text' id='messageLabel'>定義</span>                                             ";             
-                                str += "    </div>                                                                                                       ";     
-                                str += "    <textarea class='form-control' name='define_"+i+"' rows='3' required>"+response[String("define_"+i)]+"</textarea>";        
-                                str += "</div>                                                                                                           ";
-                                $(".Word").append(str);
-                                fieldnumber+=1;
+                    if($("#nameinput").val() != null){
+                        $.ajax({
+                            url: "/get_lab",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") , 'name' : $('#nameinput').val()}),
+                            success: function(response) {
+                                console.log(response["number"]);
+                                console.log(response);
+                                $(".Word").html("");
+                                fieldnumber = 0;
+                                for(let i=0;i<response["number"];i++){
+                                    let str="";        
+                                    str += "<div class='input-group mb-3'>                                                                                  ";          
+                                    str += "    <div class='input-group-prepend'>                                                                           ";         
+                                    str += "        <span class='input-group-text' id='messageLabel'>語詞</span>                                            ";        
+                                    str += "    </div>                                                                                                      ";       
+                                    str += "    <textarea class='form-control' name='word_"+i+"' rows='3' required>"+response[String("word_"+i)]+"</textarea>    ";         
+                                    str += "    <div class='input-group-prepend'>                                                                            ";     
+                                    str += "        <span class='input-group-text' id='messageLabel'>定義</span>                                             ";             
+                                    str += "    </div>                                                                                                       ";     
+                                    str += "    <textarea class='form-control' name='define_"+i+"' rows='3' required>"+response[String("define_"+i)]+"</textarea>";        
+                                    str += "</div>                                                                                                           ";
+                                    $(".Word").append(str);
+                                    fieldnumber+=1;
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
                 function token_verify(){
                     $.ajax({
