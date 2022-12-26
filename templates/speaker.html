@@ -88,6 +88,20 @@
             let lab_file=NaN;
             let ans = [];
             let state = [];
+            let now = 0;
+            
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.continuous = true;
+
+            recognition.addEventListener('result', (e) => {
+              const say = Array.from(e.results)
+                .map(result => result[0])
+                .map(result => result.transcript)
+                .join('');
+                say_result(now,say);
+            });
+
             $(document).ready(start);
             function start(){
                 if(localStorage.getItem("word_card_email")== null){
@@ -98,6 +112,7 @@
                 lab_name = {{ _lab_name|tojson }};
                 console.log("lab_name is: "+lab_name);
                 get_lab_word();
+
                 //alert(lab_name);
             }
             function login_out(){
@@ -158,60 +173,61 @@
 
             function made_card(number,word){
                 let str = "";
-                str += " <div class = 'container col-6 h-100'>                                                                                                                     ";                                                                                                                
-                str += "     <div class = 'row'>                                                                                                                                   ";                                                                                                                                                                                              
-                str += "         <div class = 'col-12 mb-3 p-0'>                                                                                                                   ";                                                                                                   
-                str += "             <div id = 'speaking_5' class='card pl-1' >                                                                                                    ";                                                                                                                  
-                str += "                 <div class='card-text'>                                                                                                                   ";                                                                                                   
-                str += "                     <small class='text-muted'>請照著念</small>                                                                                             ";                                                                                                                          
-                str += "                 </div>                                                                                                                                    ";                                                                                  
-                str += "                 <h5 class='card-body align-items-center text-center'>"+word+"</h5>                                                                        ";                                                                                                                                                                                                                   
-                str += "                 <div id = 'speaking_area' class='card-footer bg-transparent'>                                                                             ";                                                                                                                                         
-                str += "                     <div class='input-group justify-content-center'>                                                                                      ";                                                                                                                                
-                str += "                         <button type = 'button' style = 'border:0px;' id = 'btn_"+number+"'>                                                                                    ";                                                                                                                                  
-                str += "                             <img id = 'microphone' src = '../static/microphone.png' style = 'height:4ex;'/>                                               ";                                                                                                                                                                       
-                str += "                         </button>                                                                                                                         ";                                                                                             
-                str += "                       </div>                                                                                                                              ";                                                                                                     
-                str += "                 </div>                                                                                                                                    ";                                                                                  
-                str += "             </div>                                                                                                                                        ";                                                                              
-                str += "         </div>                                                                                                                                            ";                                                                          
-                str += "     </div>                                                                                                                                                ";                                                                      
-                str += " </div>                                                                                                                                                    ";                                                                  
+                str += "    <div class = 'container col-6 h-100'>                                                                                                                     ";                                                                                                                
+                str += "        <div class = 'row'>                                                                                                                                   ";                                                                                                                                                                                              
+                str += "            <div class = 'col-12 mb-3 p-0'>                                                                                                                   ";                                                                                                   
+                str += "                <div id = 'speaking_5' class='card pl-1' >                                                                                                    ";                                                                                                                  
+                str += "                    <div class='card-text'>                                                                                                                   ";                                                                                                   
+                str += "                        <small class='text-muted'>請照著念</small>                                                                                             ";                                                                                                                          
+                str += "                    </div>                                                                                                                                    ";                                                                                  
+                str += "                    <h5 class='card-body align-items-center text-center'>"+word+"</h5>                                                                        ";                                                                                                                                                                                                                   
+                str += "                    <div id = 'speaking_area' class='card-footer bg-transparent'>                                                                             ";                                                                                                                                         
+                str += "                        <div class='input-group justify-content-center' id='"+"dp_"+number+"'>                                                                                      ";                                                                                                                                
+                str += "                            <button type = 'button' style = 'border:0px;' id = 'btn_"+number+"'>                                                                                    ";                                                                                                                                  
+                str += "                                <img id = 'microphone' src = '../static/microphone.png' style = 'height:4ex;'/>                                               ";                                                                                                                                                                       
+                str += "                            </button>                                                                                                                         ";                                                                                             
+                str += "                          </div>                                                                                                                              ";                                                                                                     
+                str += "                    </div>                                                                                                                                    ";                                                                                  
+                str += "                </div>                                                                                                                                        ";                                                                              
+                str += "            </div>                                                                                                                                            ";                                                                          
+                str += "        </div>                                                                                                                                                ";                                                                      
+                str += "    </div>                                                                                                                                                    ";                                                                  
                 $("#display").append(str);
             }
             function click_begin(number){
                 console.log(number+" is push");
+                recognition.start();
             }
             function click_end(number){
+                now = number;
                 console.log(number+" is pull");
+                recognition.stop();
             }
-            function unuse(){
-                //start
-                $("#microphone").click(change_microphone_icon);
-                
-                //doing thing
-                function change_microphone_icon(){
-                    if(!is_speaking) {
-                        is_speaking = true;
-                        $("#microphone").attr("src", "../static/red_square.png");
-                        return
-                    }     
-                    else {
-                        is_speaking = false;
-                        has_spoken = true;
-                        $("#microphone").attr("src", "../static/microphone.png");
-                        $("#has_spoken").remove();
-                    }  
-                    display_has_spoken_icon();
-
-
-                    function display_has_spoken_icon(){
-                        if(has_spoken && !is_speaking)
-                            return $("#speaking_area").append("<img id = 'has_spoken' src = '../static/green_tick.png' style = 'height: 3ex; float:right;'/>");
-                        else   
-                            $("#has_spoken").remove();
+            function say_result(number,say){
+                if(say.toUpperCase() == ans[number].toUpperCase()){
+                    $("#dp_"+number).html("<img src = '../static/green_tick.png' style = 'height:4ex;'/> ");
+                    alert("發音正確><");
+                    state[number]="true";
+                    let bo = "true";
+                    for(let i = 0 ; i < lab_file["number"] ; i++){
+                        if(state[i] != "true"){
+                            bo = "false";
+                            break;
+                        }
+                    }
+                    if(bo == "true"){
+                        game_over();
                     }
                 }
+                else{
+                    state[number]="false";
+                    alert("發音不正確喔QQ");
+                }
+                console.log(number+" is : "+say);
+            }
+            function game_over(){
+                alert("!!恭喜你完成本次的口說測驗!!");
+                location.href='../set_index';
             }
         </script>
     </body>
