@@ -52,29 +52,29 @@
     <div class="container mt-5">
       <div class="row">
         <div class="col-md-4">
-          <div class="card">
-            <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Feature 1">
-            <div class="card-body">
-              <h5 class="card-title">Feature 1</h5>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tristique leo vel porttitor ornare.</p>
+          <div class="card" id="demo">
+            <img src="../static/demo.png" class="card-img-top" alt="Feature 2">
+            <div class="card-body bg-light">
+              <h5 class="card-title">Demo Video</h5>
+              <p class="card-text">有關此專案的Demo Video連結</p>
             </div>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="card">
-            <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Feature 2">
-            <div class="card-body">
-              <h5 class="card-title">Feature 2</h5>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tristique leo vel porttitor ornare.</p>
+          <div class="card" id="ppt">
+            <img src="../static/ppt.png" class="card-img-top " alt="Feature 1" >
+            <div class="card-body bg-light">
+              <h5 class="card-title">簡報</h5>
+              <p class="card-text">有關此專案的簡報連結.</p>
             </div>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="card">
-            <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Feature 3">
-            <div class="card-body">
-              <h5 class="card-title">Feature 3</h5>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tristique leo vel porttitor ornare.</p>
+          <div class="card" id="github">
+            <img src="../static/github.png" class="card-img-top" alt="Feature 3">
+            <div class="card-body bg-light">
+              <h5 class="card-title">Github</h5>
+              <p class="card-text">有關此專案的github連結.</p>
             </div>
           </div>
         </div>
@@ -82,36 +82,14 @@
       </div>
     </div>
 
-    
-      <!-- Login Form --><!--
-      <div class="container mt-5">
-        <div class="row">
-          <div class="col-md-6 offset-md-3">
-            <h3>Sign In</h3>
-            <form>
-              <div class="form-group">
-                <label for="email">Email address</label>
-                <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-              </div>
-              <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password">
-              </div>
-              <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="rememberMe">
-                <label class="form-check-label" for="rememberMe">Remember me</label>
-              </div>
-              <button type="submit" class="btn btn-primary">Sign In</button>
-          </form>
-        </div>
-      </div>
-    </div>-->
-
-
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script>
+      $("#demo"  ).on("click",function(){location.href = "https://www.w3schools.com";});
+      $("#ppt"   ).on("click",function(){location.href = "https://docs.google.com/presentation/d/1UEJx_eG3-edly740Zbo6A1jlZhCHMpAK/mobilepresent?slide=id.g1923433461d_5_75"});
+      $("#github").on("click",function(){location.href = "https://github.com/YiKaiWu1125/word_card"});
+    </script>
   </body>
 </html>
