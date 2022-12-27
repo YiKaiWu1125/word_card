@@ -45,6 +45,42 @@
             </div>
         </nav>
 
+        <div class = "container col-6 h-100">
+            <h1 class="text-center mb-3">聽力測驗模式</h1>
+            <div id="display">
+                <!--sample
+                <div class = "row">
+                    <div class = "col-12 mb-3 p-0">
+                        <div id = "speaking_5" class="card pl-1">
+                            <div class="card-text">
+                                <small class="text-muted">第一題</small>
+                            </div>
+                            <div class="card-text text-center p-4">
+                                <button type = "button" class = "p-2" style = "border:0px;">
+                                    <img src = "../static/speaker_spread_out_audio.png" style = "height:5ex;"/>
+                                </button>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" aria-label="Listening and write your answer">
+                                    <a href="#speaking_5">
+                                        <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">下一題</button>
+                                    </a>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -->
+            </div>
+
+            <div class = "row text-center">
+                <div class = "col-12">
+                    <button class="btn btn-success my-2 my-sm-0" type="submit" id="submit_test">提交答案</button>
+                </div>
+            </div>
+            
+        </div>
         
 
         <!-- Optional JavaScript -->
@@ -54,6 +90,7 @@
         <script>
             let lab_name="";
             let lab_file=NaN;
+            let ans = [];
             $(document).ready(start);
             function start(){
                 if(localStorage.getItem("word_card_email")== null){
@@ -104,9 +141,67 @@
                         console.log(response[String("word_"+i)],response[String("define_"+i)]);
                     }
                     lab_file=response;
-                    console.log(lab_file);
+                    init_card(response);
                 }
             });
+            }
+            function speak(text) {
+                const synth = window.speechSynthesis;
+                const utterance = new SpeechSynthesisUtterance(text);
+                synth.speak(utterance);
+            }
+            function init_card(response){
+                for(let i=0;i<response["number"];i++){
+                    made_card(i);
+                    ans[i]=response[String("word_"+i)];
+                }
+                for(let i=0;i<response["number"];i++){
+                    $("#btn_"+i).on("click",function(){speak(response[String("word_"+i)])});
+                }
+                $("#submit_test").on("click",submit_test);
+            }
+            function made_card(number){
+                let str = "";
+                str += "<div class = 'row'>                                                                                                                 ";                                                                  
+                str += "    <div class = 'col-12 mb-3 p-0'>                                                                                                 ";                                                                                     
+                str += "        <div id = 'speaking_"+number+"' class='card pl-1'>                                                                                   ";                                                   
+                str += "            <div class='card-text'>                                                                                                 ";                                                                                                     
+                str += "                <small class='text-muted'>第"+(number+1)+"題</small>                                                                     ";                                                                                                                                          
+                str += "            </div>                                                                                                                  ";                    
+                str += "            <div class='card-text text-center p-4'>                                                                                 ";                                                                                                     
+                str += "                <button type = 'button' class = 'p-2' style = 'border:0px;' id='btn_"+number+"'>                                 ";                                              
+                str += "                    <img src = '../static/speaker_spread_out_audio.png' style = 'height:5ex;'/>                                     ";                                                 
+                str += "                </button>                                                                                                           ";           
+                str += "            </div>                                                                                                                  ";                                                                    
+                str += "            <div class='card-footer bg-transparent'>                                                                                ";                                                      
+                str += "                <div class='input-group'>                                                                                           ";                                           
+                str += "                    <input type='text' class='form-control' aria-label='Listening and write your answer' id='input_"+number+"'>     ";                                                                                           
+                str += "                    <a href='#speaking_"+(number+1)+"'>                                                                                          ";                                                            
+                str += "                        <button class='btn btn-outline-secondary my-2 my-sm-0' type='submit'>下一題</button>                        ";                                                                                              
+                str += "                    </a>                                                                                                            ";                                          
+                str += "                  </div>                                                                                                            ";                                                          
+                str += "            </div>                                                                                                                  ";                                    
+                str += "        </div>                                                                                                                      ";                                                
+                str += "    </div>                                                                                                                          ";                                                               
+                str += "</div>                                                                                                                              ";                                                        
+                $("#display").append(str);
+            }
+            function submit_test(){
+                let ans_y = 0;
+                let ans_n = 0;
+                let input_arr = [];
+                let error_id = [];
+                for(let i=0;i<lab_file["number"];i++){
+                    input_arr.push($("#input_"+i).val());
+                    if(lab_file["word_"+i]!=$("#input_"+i).val()){
+                        ans_n++;
+                        error_id.push(i);
+                    }
+                    else{
+                        ans_y++;
+                    }
+                }
+                alert(ans_y+" "+ans_n);
             }
         </script>
     </body>
