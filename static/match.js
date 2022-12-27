@@ -2,6 +2,7 @@ let pairs = new Array();
 let idCount = 0;
 let draggedTarget;
 let dropTarget;
+let have = 0;
 
 class Pair {
     constructor(word, definition) {
@@ -36,6 +37,7 @@ function initIcons() {
     let x2;
     let y2;
     let z2;
+    have = words.length;
     let game = document.getElementById("game");
     game.addEventListener("dragover", () => allowDrop(event), false);
 
@@ -141,6 +143,11 @@ function dragElement(elmnt) {
         if (checkMatch(draggedTarget, dropTarget)) {
             draggedTarget.remove();
             dropTarget.remove();
+            have--;
+            console.log("have"+have);
+            if(have == 0){
+                $("#game").html("<img src = '../static/gamepass.png' class='text-center'/>")
+            }
         }
 
         draggedTarget = null;
