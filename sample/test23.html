@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>English to Chinese Translation</title>
+</head>
+<body>
+  <h1>English to Chinese Translation</h1>
+  <form>
+    <label for="english-input">Enter English text:</label><br>
+    <textarea id="english-input" rows="4" cols="50"></textarea><br>
+    <button type="button" onclick="translateText()">Translate</button>
+  </form> 
+  <br>
+  <h2>Chinese Translation:</h2>
+  <p id="chinese-output"></p>
+  
+  <script>
+    function translateText() {
+      // Get the English input text
+      var englishInput = document.getElementById("english-input").value;
+      
+      // Use the Google Translate API to translate the text to Chinese
+      var chineseOutput = translate(englishInput, "en", "zh-CN");
+      
+      // Update the Chinese translation text on the page
+      document.getElementById("chinese-output").innerHTML = chineseOutput;
+    }
+  </script>
+</body>
+</html>
