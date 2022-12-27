@@ -44,7 +44,41 @@
                 </ul>
             </div>
         </nav>
+        <h1 class="text-center mb-3">學習模式</h1>
+        <div class = "container col-6 h-100" >
+            <div id="display">
+            
+                <!--sample
+                <div class = "row">
+                    <div class = "col-12 mb-3 p-0">
+                        <div id = "listening_2" class="card pl-1" style = "height: 280px;">
+                            <div class="card-text">
+                                <small class="text-muted">定義</small>
+                                <button type = "button" style = "border:0px;" onclick="speak('電腦 通訊 及 消費者 電子 產品')">
+                                    <img src = "../static/speaker_spread_out_audio.png" style = "height:3ex;"/>
+                                </button>
+                            </div>
+                            <h5 class="card-body align-items-center text-center">Computer Communication and Consumer Electronics 電腦 通訊 及 消費者 電子 產品</h5>
+                            <div class="card-footer bg-transparent">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" aria-label="Listening and write your answer" placeholder="請輸入您的答案">
+                                    <a href="#listening_3">
+                                        <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">下一題</button>
+                                    </a>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -->
 
+            </div>
+            <div class = "row text-center">
+                <div class = "col-12">
+                    <button class="btn btn-success my-2 my-sm-0" type="submit" id="submit_test">提交測試</button>
+                </div>
+            </div>
+        </div>
         
 
         <!-- Optional JavaScript -->
@@ -54,6 +88,7 @@
         <script>
             let lab_name="";
             let lab_file=NaN;
+            let ans = [];
             $(document).ready(start);
             function start(){
                 if(localStorage.getItem("word_card_email")== null){
@@ -105,8 +140,79 @@
                     }
                     lab_file=response;
                     console.log(lab_file);
+                    init_card(response);
                 }
             });
+            }
+            function speak(text) {
+                const synth = window.speechSynthesis;
+                const utterance = new SpeechSynthesisUtterance(text);
+                synth.speak(utterance);
+            }
+            function init_card(response){
+                for(let i=0;i<response["number"];i++){
+                    made_card(i,response[String("word_"+i)]);
+                    ans[i]=response[String("define_"+i)];
+                }
+                for(let i=0;i<response["number"];i++){
+                    $("#btn_"+i).on("click",function(){speak(response[String("word_"+i)])});
+                }
+                $("#submit_test").on("click",submit_test);
+            }
+            function made_card(number,word){
+                str = "";
+                str += "<div class = 'row'>                                                                                                                                          ";                 
+                str += "    <div class = 'col-12 mb-3 p-0'>                                                                                                                          ";                                
+                str += "        <div id = 'listening_2' class='card pl-1' >                                                                                                          ";                                                                        
+                str += "            <div class='card-text'>                                                                                                                          ";                                
+                str += "                <small class='text-muted'>定義</small>                                                                                                       ";                                                   
+                str += "                <button type = 'button' style = 'border:0px;' id='btn_"+number+"'>                                                                           ";                                                                       
+                str += "                    <img src = '../static/speaker_spread_out_audio.png' style = 'height:3ex;'/>                                                              ";                                                     
+                str += "                </button>                                                                                                                                    ";                                                             
+                str += "            </div>                                                                                                                                           ";                                                      
+                str += "            <h5 class='card-body align-items-center text-center'>"+word+"</h5>                                                                               ";                                                                  
+                str += "            <div class='card-footer bg-transparent'>                                                                                                         ";                                                                                        
+                str += "                <div class='input-group'>                                                                                                                    ";                                                                             
+                str += "                    <input type='text' class='form-control' aria-label='Listening and write your answer' placeholder='請輸入您的答案' id='input_"+number+"'>   ";                                                                                            
+                str += "                    <a href='#listening_3'>                                                                                                                  ";                                                                               
+                str += "                        <button class='btn btn-outline-secondary my-2 my-sm-0' type='submit'>下一題</button>                                                  ";                                                                                                         
+                str += "                    </a>                                                                                                                                     ";                                                            
+                str += "                  </div>                                                                                                                                     ";                                                            
+                str += "            </div>                                                                                                                                           ";                                                      
+                str += "        </div>                                                                                                                                               ";                                                  
+                str += "    </div>                                                                                                                                                   ";                                              
+                str += "</div>                                                                                                                                                       ";                                           
+                $("#display").append(str);
+            }
+            function submit_test(){
+                let ans_y = 0;
+                let ans_n = 0;
+                let error_id = [];
+                let error_input = [];
+                for(let i = 0 ;i< lab_file["number"];i++){
+                    if(ans[i]!=$("#input_"+i).val()){
+                        ans_n++;
+                        error_id.push(i);
+                        error_input.push($("#input_"+i).val());
+                    }
+                    else{
+                        ans_y++;
+                    }
+                }
+                //game_over
+                if(ans_n == 0){
+                    alert("恭喜全對");
+                }
+                else{
+                    alert("一共"+lab_file["number"]+"題，您一共答對 "+ans_y+" 題，答錯 "+ans_n+" 題，以下進行檢討");
+                    for(let i = 0; i < error_id.length ;i++){
+                        let str = "錯誤"+(i+1)+" , "+lab_file[String("word_"+error_id[i])]+" 的正確定義為 "+lab_file[String("word_"+error_id[i])];
+                        str+= " 而非 "+error_input[i]+" .";
+                        alert(str);
+                    }
+                    alert("以上，檢討完畢");
+                }
+                location.href='../set_index';
             }
         </script>
     </body>
