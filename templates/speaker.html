@@ -44,34 +44,32 @@
                 </ul>
             </div>
         </nav>
-        
-        <h1 class="text-center mb-3">口說測驗模式</h1>
+        <div class = "container h-100" style="height: 100px; ">
+            <h1 class="text-center mb-3">口說測驗模式</h1>
 
-        <div id="display">
-            <!-- sample
-            
-            <div class = "container col-6 h-100">
-                <div class = "row">
-                    <div class = "col-12 mb-3 p-0">
-                        <div id = "speaking_5" class="card pl-1" >
-                            <div class="card-text">
-                                <small class="text-muted">請照著念</small>
-                            </div>
-                            <h5 class="card-body align-items-center text-center">Computer Communication and Consumer Electronics 電腦 通訊 及 消費者 電子 產品</h5>
-                            <div id = "speaking_area" class="card-footer bg-transparent">
-                                <div class="input-group justify-content-center">
-                                    <button type = "button" style = "border:0px;">
-                                        <img id = "microphone" src = "../static/microphone.png" style = "height:4ex;"/>
-                                    </button>
-                                  </div>             
+            <div id="display">
+                <!-- sample
+                
+                    <div class = "row">
+                        <div class = "col-12 mb-3 p-0">
+                            <div id = "speaking_5" class="card pl-1" >
+                                <div class="card-text">
+                                    <small class="text-muted">請照著念</small>
+                                </div>
+                                <h5 class="card-body align-items-center text-center">Computer Communication and Consumer Electronics 電腦 通訊 及 消費者 電子 產品</h5>
+                                <div id = "speaking_area" class="card-footer bg-transparent">
+                                    <div class="input-group justify-content-center">
+                                        <button type = "button" style = "border:0px;">
+                                            <img id = "microphone" src = "../static/microphone.png" style = "height:4ex;"/>
+                                        </button>
+                                      </div>             
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+
+                -->
             </div>
-            
-            -->
-            
         </div>
 
 
@@ -172,26 +170,24 @@
             }
 
             function made_card(number,word){
-                let str = "";
-                str += "    <div class = 'container col-6 h-100'>                                                                                                                     ";                                                                                                                
-                str += "        <div class = 'row'>                                                                                                                                   ";                                                                                                                                                                                              
-                str += "            <div class = 'col-12 mb-3 p-0'>                                                                                                                   ";                                                                                                   
-                str += "                <div id = 'speaking_5' class='card pl-1' >                                                                                                    ";                                                                                                                  
-                str += "                    <div class='card-text'>                                                                                                                   ";                                                                                                   
-                str += "                        <small class='text-muted'>試題:"+(number+1)+" 請照著念</small>                                                                         ";                                                                                                                          
-                str += "                    </div>                                                                                                                                    ";                                                                                  
-                str += "                    <h5 class='card-body align-items-center text-center'>"+word+"</h5>                                                                        ";                                                                                                                                                                                                                   
-                str += "                    <div id = 'speaking_area' class='card-footer bg-transparent'>                                                                             ";                                                                                                                                         
-                str += "                        <div class='input-group justify-content-center' id='"+"dp_"+number+"'>                                                                ";                                                                                                                                
-                str += "                            <button type = 'button' style = 'border:0px;' id = 'btn_"+number+"'>                                                              ";                                                                                                                                  
-                str += "                                <img id = 'microphone' src = '../static/microphone.png' style = 'height:4ex;'/>                                               ";                                                                                                                                                                       
-                str += "                            </button>                                                                                                                         ";                                                                                             
-                str += "                          </div>                                                                                                                              ";                                                                                                     
-                str += "                    </div>                                                                                                                                    ";                                                                                  
-                str += "                </div>                                                                                                                                        ";                                                                              
-                str += "            </div>                                                                                                                                            ";                                                                          
-                str += "        </div>                                                                                                                                                ";                                                                      
-                str += "    </div>                                                                                                                                                    ";                                                                  
+                let str = "";                                                                                                          
+                str += "    <div class = 'row'>                                                                                                                                   ";                                                                                                                                                                                              
+                str += "        <div class = 'col-12 mb-3 p-0'>                                                                                                                   ";                                                                                                   
+                str += "            <div id = 'speaking_5' class='card pl-1' >                                                                                                    ";                                                                                                                  
+                str += "                <div class='card-text'>                                                                                                                   ";                                                                                                   
+                str += "                    <small class='text-muted'>試題:"+(number+1)+" 請照著念</small>                                                                         ";                                                                                                                          
+                str += "                </div>                                                                                                                                    ";                                                                                  
+                str += "                <h5 class='card-body align-items-center text-center'>"+word+"</h5>                                                                        ";                                                                                                                                                                                                                   
+                str += "                <div id = 'speaking_area' class='card-footer bg-transparent'>                                                                             ";                                                                                                                                         
+                str += "                    <div class='input-group justify-content-center' id='"+"dp_"+number+"'>                                                                ";                                                                                                                                
+                str += "                        <button type = 'button' style = 'border:0px;' id = 'btn_"+number+"'>                                                              ";                                                                                                                                  
+                str += "                            <img id = 'microphone' src = '../static/microphone.png' style = 'height:4ex;'/>                                               ";                                                                                                                                                                       
+                str += "                        </button>                                                                                                                         ";                                                                                             
+                str += "                      </div>                                                                                                                              ";                                                                                                     
+                str += "                </div>                                                                                                                                    ";                                                                                  
+                str += "            </div>                                                                                                                                        ";                                                                              
+                str += "        </div>                                                                                                                                            ";                                                                          
+                str += "    </div>                                                                                                                                                ";                                                                                                                                    
                 $("#display").append(str);
             }
             function click_begin(number){
