@@ -231,7 +231,8 @@
                 contentType: "application/json",
                 data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token")}),
                 success: function(response) {
-                    localStorage.clear();
+                    localStorage.removeItem('word_card_email');
+                    localStorage.removeItem('word_card_token');
                     location.href='/';
                 }
               });

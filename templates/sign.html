@@ -22,17 +22,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/">Home</a>
             </li>
-            <!--<li class="nav-item">
-              <a class="nav-link" href="#">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
-            </li>-->
-          </ul><!--
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form>-->
+          </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
               <a class="nav-link" href="#">Sign In</a>
@@ -49,14 +39,14 @@
               <h3>Login/registre</h3>
             </div>
             <div class="card-body">
-              <form id="login_from">
+              <div id="login_from">
                 <div class="form-group">
                   <label for="email">Email address</label>
-                  <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                  <input type="email" class="form-control" id="email" aria-describedby="emailHelp" value="">
                   <small id="emailHelp" class="form-text text-muted">please enter your email.</small>
                 </div>
                 <!--<a href="home.html" class="btn btn-primary">Sign In</a>-->
-              </form>
+              </div>
             </div>
           </div>
         </div>
@@ -78,24 +68,28 @@
     <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script>
+      $(function() {start();});
       function start(){
         if(localStorage.getItem("word_card_email")!= null){
-          location.href='home'
+          location.href='home';
+        }
+        else if(localStorage.getItem("word_card_remember_me")!=null){
+          $("#email").val(localStorage.getItem("word_card_remember_me"));
+          mail_listen();
         }
         $("#email").on("blur", mail_listen);
       }
       
       function mail_listen(){
         let str="";
-        if($('#email').val()==""){
-          str  = "<div class='form-group'>                                                             ";     
+        if($("#email").val().length <= 0){
+          str  = "<div class='form-group'>                                                                      ";     
           str += "  <label for='email'>Email address(請勿刪除)</label>                                           ";   
-          str += "  <input type='email' class='form-control' id='email' aria-describedby='emailHelp'>  ";       
-          str += "  <small id='emailHelp' class='form-text text-muted'>please enter your email.</small>";          
-          str += "</div>                                                                               ";
+          str += "  <input type='email' class='form-control' id='email' aria-describedby='emailHelp' value='' > ";       
+          str += "  <small id='emailHelp' class='form-text text-muted'>please enter your email.</small>         ";          
+          str += "</div>                                                                                        ";
           $("#login_from").html(str);
-          $("#email").on("blur", mail_listen); 
-                                                                                            
+          $("#email").on("blur", mail_listen);                                                                                  
         }
         else{
           $.ajax({
@@ -105,7 +99,9 @@
             data: JSON.stringify({ 'email': $('#email').val()}),
             success: function(response) {
               if (response["message"] == "true"){
-                alert( "此信箱已註冊，可直接進行登入");
+                if(localStorage.getItem("word_card_remember_me")!=$('#email').val()){
+                  alert( "此信箱已註冊，可直接進行登入");
+                }
                 str = "<div class='form-group'>                                                                                        ";           
                 str+= "  <label for='email'>Email address</label>                                                                      ";     
                 str+= "  <input type='email' class='form-control' id='email' aria-describedby='emailHelp' value="+$('#email').val()+"> ";                    
@@ -116,15 +112,15 @@
                 str+= "  <small id='emailHelp' class='form-text text-muted'>please enter your password.</small>                        ";          
                 str+= "</div>                                                                                                          ";        
                 str+= "<div class='form-group form-check'>                                                                             ";      
-                str+= "  <input type='checkbox' class='form-check-input' id='rememberMe'>                                              ";          
+                str+= "  <input type='checkbox' class='form-check-input' id='rememberMe' checked='checked'>                            ";          
                 str+= "  <label class='form-check-label' for='rememberMe'>Remember me</label>                                          ";                
                 str+= "</div>                                                                                                          ";        
-                str+= "<button type='submit' class='btn btn-primary' >Sign In</button>                                                 ";
+                str+= "<button type='submit' class='btn btn-primary' id='sub_login'>Sign In</button>                                   ";
                 $("#login_from").html(str);
                 $("#email").on("blur", mail_listen);  
-                $("#login_from").submit(function(e){
-                  login(e);
-                });
+                $("#sub_login").on("click",login);
+                $("#rememberMe").change(rememberme);
+                rememberme();
               }
               else{
                 alert( "此信箱尚未註冊，開始進行註冊");
@@ -135,67 +131,84 @@
                 str+= "<div class='form-group'>                                                                                         ";    
                 str+= "  <label for='password'>New Password</label>                                                                     ";        
                 str+= "  <input type='password' class='form-control' id='password'>                                                     ";
-                str+= "  <small id='emailHelp' class='form-text text-muted'>please enter your new password.</small>                     ";          
+                str+= "  <small id='emailHelp' class='form-text text-muted'>please enter your new password.</small>                     ";
+                str+= "  <label for='password'>Again new Password</label>                                                               ";    
+                str+= "  <input type='password' class='form-control' id='ag_password'>                                                  ";
+                str+= "  <small id='emailHelp' class='form-text text-muted'>please enter your new password again.</small>               ";          
                 str+= "</div>                                                                                                           ";        
                 //str+= "<div class='form-group form-check'>                                                                            ";      
                 //str+= "  <input type='checkbox' class='form-check-input' id='rememberMe'>                                             ";          
                 //str+= "  <label class='form-check-label' for='rememberMe'>Remember me</label>                                         ";                
                 //str+= "</div>                                                                                                         ";        
-                str+= "<button type='submit' class='btn btn-primary' >register</button>                                                 ";
+                str+= "<button type='submit' class='btn btn-primary' id='sub_register'>register</button>                                ";
                 $("#login_from").html(str);
                 $("#email").on("blur", mail_listen);   
-                $("#login_from").submit(function(e){
-                  register(e);
-                });
+                $("#sub_register").on("click",register);
               }
             }
           });
-          function login(e){
-            //alert("login")
-            $.ajax({
-              url: "/login",
-              type: "POST",
-              contentType: "application/json",
-              data: JSON.stringify({ 'email': $('#email').val() , 'password': $('#password').val()}),
-              success: function(response) {
-                if(response["message"]=="successful"){
-                  localStorage.setItem("word_card_email", $('#email').val());
-                  localStorage.setItem("word_card_token", response["token"]);
-                  alert("登入成功");
-                  location.href='home'
-                }
-                else{
-                  alert("密碼錯誤，請重新輸入");
-                }
-              }
-            });
-            e.preventDefault(); // avoid to execute the actual submit of the form.
-          }
-          function register(e){
-            //alert("regoster")
-            $.ajax({
-              url: "/register",
-              type: "POST",
-              contentType: "application/json",
-              data: JSON.stringify({ 'email': $('#email').val() , 'password': $('#password').val()}),
-              success: function(response) {
-                if(response["message"]=="successful"){
-                  localStorage.setItem("word_card_email", $('#email').val());
-                  localStorage.setItem("word_card_token", response["token"]);
-                  alert("登入成功")
-                  location.href='home'
-                }
-                else{
-                  alert("發生錯誤，請重新輸入");
-                }
-              }
-            });
-            e.preventDefault(); // avoid to execute the actual submit of the form.
-          }
         }
       }
-
-      $(document).ready(start);
+      function login(){
+        $.ajax({
+          url: "/login",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ 'email': $('#email').val() , 'password': $('#password').val()}),
+          success: function(response) {
+            if(response["message"]=="successful"){
+              localStorage.setItem("word_card_email", $('#email').val());
+              localStorage.setItem("word_card_token", response["token"]);
+              alert("登入成功");
+              location.href='home';
+            }
+            else{
+              alert("密碼錯誤，請重新輸入");
+            }
+          }
+        });
+      }
+      function register(){
+        if($('#password').val()!=$('#ag_password').val()){
+          alert("兩次密碼不為相同，請重新輸入");
+          $("#password").val("");
+          $("#ag_password").val("");
+        }
+        else if($('#password').val() == ""){
+          alert("密碼不能為空，請輸入密碼");
+        }
+        else{
+          $.ajax({
+            url: "/register",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ 'email': $('#email').val() , 'password': $('#password').val()}),
+            success: function(response) {
+              if(response["message"]=="successful"){
+                localStorage.setItem("word_card_email", $('#email').val());
+                localStorage.setItem("word_card_token", response["token"]);
+                alert("登入成功")
+                location.href='home';
+              }
+              else{
+                alert("發生錯誤，請重新輸入");
+              }
+            }
+          });
+        }
+      }
+      function rememberme(){
+        if($("#rememberMe").is(":checked")){
+          if(localStorage.getItem("word_card_remember_me")!=$('#email').val()){
+            alert("already remember mail");
+          }
+          localStorage.setItem("word_card_remember_me", $('#email').val());
+        }
+        else{
+          alert("already remove remember mail");
+          localStorage.removeItem("word_card_remember_me");
+        }
+      }
     </script>
   </body>
 </html>
