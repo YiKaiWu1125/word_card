@@ -65,8 +65,10 @@
                 <button type="button" class="btn btn-secondary" id="addFieldButton">Add Field</button>
                 <!-- Remove Field Button -->
                 <button type="button" class="btn btn-secondary" id="removeFieldButton">Remove Field</button>
+                <!-- Delete Lab Button -->
+                <button type="button" class="btn btn-danger" id="deletelabButton">Delete Lab</button>
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary float-right" id="submit">Submit</button>
+                <button type="submit" class="btn btn-primary float-right" id="submit">Update Lab</button>
             </form>
                 
             </div>
@@ -113,6 +115,7 @@
                             $(".input-group:last").remove();
                         }
                     }); 
+                    $("#deletelabButton").click(deletelabButton);
                     loading_labname();
                 }
                 $(function() {
@@ -217,6 +220,38 @@
                                 alert("帳號異常，請從新登入");
                                 localStorage.clear();
                                 location.href='/';
+                            }
+                        }
+                    });
+                }
+                function deletelabButton(){
+                    let labname = $("#nameinput").val();
+                    let email = localStorage.getItem("word_card_email");
+                    let token = localStorage.getItem("word_card_token");
+                    let time = new Date().toUTCString();
+
+                    let data = new FormData();
+                    data = Object.fromEntries(data);
+                    data = Object.entries(data);
+                    data.push(["lab_name",labname]);
+                    data.push(["email",email]);
+                    data.push(["token",token]);
+                    data.push(["time",time]);
+                    data = Object.fromEntries(data);
+                    data = JSON.stringify(data);
+                    
+                    $.ajax({
+                        url: "/delete_lab",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: data,
+                        success: function(response) {
+                            if(response["message"] == "true"){
+                                alert("delete successful");
+                                location.href='/modify_set';
+                            }
+                            else{
+                                alert("error");
                             }
                         }
                     });

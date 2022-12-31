@@ -145,7 +145,6 @@
                     contentType: "application/json",
                     data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") }),
                     success: function(response) {
-                        console.log("response is :"+response);
                         for(let i in response){
                             $("#nameinput").append("<option value="+response[i]['name']+">"+response[i]["name"]+"</option>");
                         }
@@ -171,12 +170,18 @@
             }
             function herf_update(){
                 let up_name=$("#nameinput").val();
-                $('#match_a').attr("href", "match/"+up_name);
-                $('#quiz_a').attr("href", "quiz/"+up_name);
-                $('#listen_a').attr("href", "listen/"+up_name);
-                $('#speaker_a').attr("href", "speaker/"+up_name);
-                $('#learn_a').attr("href", "learn/"+up_name);
-                $('#flash_card_a').attr("href", "flash_card/"+up_name);
+                if(up_name == null){
+                    alert("您尚未擁有學習集，請先建立新的學習集，再開始學習吧!");
+                    location.href='/create_set';
+                }
+                else {
+                    $('#match_a').attr("href", "match/"+up_name);
+                    $('#quiz_a').attr("href", "quiz/"+up_name);
+                    $('#listen_a').attr("href", "listen/"+up_name);
+                    $('#speaker_a').attr("href", "speaker/"+up_name);
+                    $('#learn_a').attr("href", "learn/"+up_name);
+                    $('#flash_card_a').attr("href", "flash_card/"+up_name);
+                }
             }
         </script>
     </body>
