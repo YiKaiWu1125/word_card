@@ -192,6 +192,25 @@ def fix():
     else :
         return jsonify({"message": "false"})
 
+@app.route('/delete_lab', methods=['POST'])
+def delete_lab():
+    data = request.get_json()
+    email = data.get('email', None)
+    token = data.get('token', None)
+    lab_name = str(data.get('lab_name', None))
+    print(email+" "+token+" "+lab_name)
+    if verify(email,token) == "true":
+        try:
+            del data["email"]
+            del data["token"]
+            now_collection = db[email]
+            now_collection.delete_one({"name": lab_name})
+            return jsonify({"message": "true"}) 
+        except:
+            return jsonify({"message": "false"}) 
+    else :
+        return jsonify({"message": "false"})
+
 
 @app.route("/")
 def web_index():
