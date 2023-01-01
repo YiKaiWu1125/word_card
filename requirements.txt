@@ -13,3 +13,5 @@ setuptools==41.2.0
 six==1.16.0
 Werkzeug==2.2.2
 zipp==3.11.0
+pygoogletranslation==2.0.6
+googletrans==4.0.0-rc1

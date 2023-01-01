@@ -15,12 +15,14 @@
   <p id="chinese-output"></p>
   
   <script>
+    const translate = require('google-translate-api');
     function translateText() {
       // Get the English input text
       var englishInput = document.getElementById("english-input").value;
       
       // Use the Google Translate API to translate the text to Chinese
-      var chineseOutput = translate(englishInput, "en", "zh-CN");
+      var chineseOutput = translate(englishInput, "en", "zh-CN"); 
+      alert(chineseOutput);
       
       // Update the Chinese translation text on the page
       document.getElementById("chinese-output").innerHTML = chineseOutput;
