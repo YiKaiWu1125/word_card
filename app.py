@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request , render_template ,send_from_directory
 from flask_cors import CORS
 from pymongo import MongoClient
+from pygoogletranslation import Translator
 import random 
 import os
 
@@ -10,6 +11,7 @@ CORS(app)
 client = MongoClient("mongodb+srv://kaikai5:kaikai5@cluster0.vwwknbu.mongodb.net/?retryWrites=true&w=majority")
 db = client["mydatabase"]
 users_collection = db["users"]
+translator_s = Translator()
 
 now_user = {}
 
@@ -178,7 +180,6 @@ def fix():
     data = request.get_json()
     email = data.get('email', None)
     token = data.get('token', None)
-    print(data)
     if verify(email,token) == "true":
         try:
             del data["email"]
@@ -198,7 +199,6 @@ def delete_lab():
     email = data.get('email', None)
     token = data.get('token', None)
     lab_name = str(data.get('lab_name', None))
-    print(email+" "+token+" "+lab_name)
     if verify(email,token) == "true":
         try:
             del data["email"]
@@ -209,6 +209,24 @@ def delete_lab():
         except:
             return jsonify({"message": "false"}) 
     else :
+        return jsonify({"message": "false"})
+
+@app.route('/translator', methods=['POST'])
+def translator():
+    data = request.get_json()
+    email = data.get('email', None)
+    token = data.get('token', None)
+    input = data.get('input', None)
+    language = data.get('language', None)
+    if verify(email,token) == "true":
+        try:
+            rep=translator_s.translate(input, dest=language) 
+            return jsonify({"message": "true","output":rep.text}) 
+        except:
+            print("unknow error")
+            return jsonify({"message": "false"}) 
+    else :
+        print("verify error")
         return jsonify({"message": "false"})
 
 
@@ -238,7 +256,6 @@ def web_set_index():
 
 @app.route("/flash_card/<_lab_name_>")
 def web_flash_card(_lab_name_):
-    print(_lab_name_)
     return render_template("flash_card.html" , _lab_name = _lab_name_)
 
 @app.route("/learn/<_lab_name_>")

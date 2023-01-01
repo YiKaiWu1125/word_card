@@ -61,19 +61,32 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="messageLabel">語詞</span>
                         </div>
-                        <textarea class="form-control" name="word_0" rows="3" required></textarea>
+                        <textarea class="form-control" name="word_0" rows="3" id="input_word_0" required></textarea>
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="messageLabel">定義</span>
                         </div>
-                        <textarea class="form-control" name="define_0" rows="3" required></textarea>
+                        <textarea class="form-control" name="define_0" rows="3" id="input_define_0" required></textarea>
                     </div>
                 </div>
+               
+               
                 <!-- Add Field Button -->
                 <button type="button" class="btn btn-secondary" id="addFieldButton">Add Field</button>
                 <!-- Remove Field Button -->
                 <button type="button" class="btn btn-secondary" id="removeFieldButton">Remove Field</button>
+                
+                <button type="button" class="btn btn-info" id="translatorButton">將定義翻譯成</button>
+                <select class="form-select form-select-lg mb-3 " id="language"  >
+                    <option value="zh-TW">中文</option>
+                    <option value="en">英文</option>
+                    <option value="ja">日文</option>
+                </select>
+            
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary float-right" id="submit">Submit</button>
+
+                
+                
             </form>
                 
             </div>
@@ -99,16 +112,16 @@
                         //$newInputGroup.find("textarea").val("");
                         // Append the new input group to the form
                         let str="";
-                        str += " <div class='input-group mb-3'>                                                                  ";        
-                        str += "     <div class='input-group-prepend'>                                                           ";               
-                        str += "         <span class='input-group-text' id='messageLabel'>語詞</span>                            ";                
-                        str += "     </div>                                                                                      ";  
-                        str += "     <textarea class='form-control' name='word_"+fieldnumber+"' rows='3' required></textarea>    ";           
-                        str += "     <div class='input-group-prepend'>                                                           ";       
-                        str += "         <span class='input-group-text' id='messageLabel'>定義</span>                            ";           
-                        str += "     </div>                                                                                      ";     
-                        str += "     <textarea class='form-control' name='define_"+fieldnumber+"' rows='3' required></textarea>  ";          
-                        str += " </div>                                                                                          ";      
+                        str += " <div class='input-group mb-3'>                                                                                                   ";        
+                        str += "     <div class='input-group-prepend'>                                                                                            ";               
+                        str += "         <span class='input-group-text' id='messageLabel'>語詞</span>                                                             ";                
+                        str += "     </div>                                                                                                                       ";  
+                        str += "     <textarea class='form-control' name='word_"+fieldnumber+"' rows='3' id='input_word_"+fieldnumber+"' required></textarea>     ";           
+                        str += "     <div class='input-group-prepend'>                                                                                            ";       
+                        str += "         <span class='input-group-text' id='messageLabel'>定義</span>                                                             ";           
+                        str += "     </div>                                                                                                                       ";     
+                        str += "     <textarea class='form-control' name='define_"+fieldnumber+"' rows='3' id='input_define_"+fieldnumber+"' required></textarea> ";          
+                        str += " </div>                                                                                                                           ";      
                         fieldnumber+=1;
                         $(".Word").append(str);
                     });
@@ -119,6 +132,7 @@
                             $(".input-group:last").remove();
                         }
                     });
+                    $("#translatorButton").click(do_translator);
                     $("#nameinput").on("blur", name_listen); 
                     fieldnumber = 1;
                 }
@@ -198,6 +212,28 @@
                             }
                         }
                     });
+                }
+                function do_translator(){
+                    alert("開始翻譯");
+                    for(let i = 0 ;i < fieldnumber; i++){
+                        let input = $("#input_word_"+i).val();
+                        let language = $("#language").val();
+                        $.ajax({
+                            url: "/translator",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") , 'input': input , 'language' : language }),
+                            success: function(response) {
+                                if(response["message"]!="true"){
+                                    alert("翻譯發生異常");
+                                }
+                                else{
+                                    $("#input_define_"+i).val(response["output"]);   
+                                }
+                            }
+                        });
+                    }
+                    alert("翻譯完成");
                 }
             </script>
     </body>
