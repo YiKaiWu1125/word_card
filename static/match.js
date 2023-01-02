@@ -80,6 +80,7 @@ function initIcons() {
     }
 
     display();
+    calculateOffset();
     registerEventListener();
 }
 
@@ -129,10 +130,10 @@ function registerEventListener() {
         dragElement(definitionItem);
     }
 
-    calculateOffset();
     document.addEventListener("scroll", calculateOffset, false);
 }
 // Code reference: https://www.w3schools.com/howto/howto_js_draggable.asp
+// Fix issue #20 reference: https://javascript.info/mouse-drag-and-drop
 function dragElement(elmnt) {
     /* Move the DIV from anywhere inside the DIV:*/
     elmnt.addEventListener("dragstart", calculateShift, false);
@@ -152,18 +153,37 @@ function dragElement(elmnt) {
     elmnt.addEventListener("drop", drop, false);
 
     function calculateShift(event) {
+        /* If condition 1: The last DragEvent screenX and screenY are 0 when mouse drag elements too fast and then discard it.
+        // The reason of choosing screenX is this is not reasonable screenX = 0 while user zoom in the window and drag the element.
+        // If condition 2: The element dragged by user will be the text on the button but not button itself if mouse dragging too fast. 
+        // This moment event.toElement.nodeName will be "#text" object in JavaScript 
+        */
+        if (event.screenX === 0 || event.toElement.nodeName == "#text") {
+            draggedTarget = null;
+            dropTarget = null;
+            return;
+        }
         draggedTarget = event.target;
         shiftX = event.clientX - draggedTarget.getBoundingClientRect().x;
         shiftY = event.clientY - draggedTarget.getBoundingClientRect().y;
     }
 
     function drag(event, shiftX, shiftY, offsetX, offsetY) {
+        if (event.screenX === 0 || event.toElement.nodeName == "#text") {
+            draggedTarget = null;
+            dropTarget = null;
+            return;
+        }
+
         dropTarget = null;
         draggedTarget.style.top = event.clientY - shiftY - offsetY + "px";
         draggedTarget.style.left = event.clientX - shiftX - offsetX + "px";
     }
 
     function drop(event) {
+        if (event.toElement.nodeName == "#text") {
+            return;
+        }
         dropTarget = event.target;
         event.preventDefault();
         if (checkMatch(draggedTarget, dropTarget)) {
