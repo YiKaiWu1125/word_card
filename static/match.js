@@ -3,6 +3,8 @@ let idCount = 0;
 let draggedTarget;
 let dropTarget;
 let have = 0;
+let offsetX;
+let offsetY;
 let shiftX;
 let shiftY;
 
@@ -126,12 +128,19 @@ function registerEventListener() {
         dragElement(wordItem);
         dragElement(definitionItem);
     }
+
+    calculateOffset();
+    document.addEventListener("scroll", calculateOffset, false);
 }
 // Code reference: https://www.w3schools.com/howto/howto_js_draggable.asp
 function dragElement(elmnt) {
     /* Move the DIV from anywhere inside the DIV:*/
     elmnt.addEventListener("dragstart", calculateShift, false);
-    elmnt.addEventListener("drag", () => drag(event, shiftX, shiftY), false);
+    elmnt.addEventListener(
+        "drag",
+        () => drag(event, shiftX, shiftY, offsetX, offsetY),
+        false
+    );
     elmnt.addEventListener(
         "dragend",
         function () {
@@ -148,10 +157,10 @@ function dragElement(elmnt) {
         shiftY = event.clientY - draggedTarget.getBoundingClientRect().y;
     }
 
-    function drag(event, shiftX, shiftY) {
+    function drag(event, shiftX, shiftY, offsetX, offsetY) {
         dropTarget = null;
-        draggedTarget.style.top = event.clientY - shiftY + "px";
-        draggedTarget.style.left = event.clientX - shiftX + "px";
+        draggedTarget.style.top = event.clientY - shiftY - offsetY + "px";
+        draggedTarget.style.left = event.clientX - shiftX - offsetX + "px";
     }
 
     function drop(event) {
@@ -215,4 +224,9 @@ function dragElement(elmnt) {
 function allowDrop(event) {
     dropTarget = event.target;
     event.preventDefault();
+}
+
+function calculateOffset(event) {
+    offsetX = $("#game").offset().left - window.pageXOffset;
+    offsetY = $("#game").offset().top - window.pageYOffset;
 }
