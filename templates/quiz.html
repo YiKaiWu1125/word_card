@@ -139,9 +139,9 @@
                 contentType: "application/json",
                 data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") , 'name' : lab_name}),
                 success: function(response) {
-                    for(let i=0;i<response["number"];i++){
-                        console.log(response[String("word_"+i)],response[String("define_"+i)]);
-                    }
+                    //for(let i=0;i<response["number"];i++){
+                    //    console.log(response[String("word_"+i)],response[String("define_"+i)]);
+                    //}
                     if(response["number"]>=1){
                         init_card(response);
                     }
@@ -187,7 +187,7 @@
             }
             function init_card(response){
                 for(let i=0;i<response["number"];i++){
-                    console.log(response[String("word_"+i)],response[String("define_"+i)]);
+                    //console.log(response[String("word_"+i)],response[String("define_"+i)]);
                     if(Math.random()<0.5 || response["number"] == 1){
                         //true;
                         made_card(i,response[String("word_"+i)],response[String("define_"+i)]);
@@ -196,8 +196,8 @@
                     }
                     else{
                         //false;
-                        k = response["number"];
-                        while(k==response["number"]){
+                        k = Math.floor(Math.random() * response["number"]);
+                        while(k==i){
                             k = Math.floor(Math.random() * response["number"]);
                         }
                         made_card(i,response[String("word_"+i)],response[String("define_"+k)]);
@@ -257,16 +257,14 @@
                 }
                 else{
                     alert("一共"+total+"題，您一共答對 "+ans_true+" 題，答錯 "+ans_false+" 題，以下進行檢討");
-                    console.log(arr);
                     for(let i = 0; i < arr.length ;i++){
                         let str = "錯誤"+(i+1)+" , "+lab_file[String("word_"+arr[i])]+" 的正確定義";
-                        if(ans[i] == "true"){
-                            str+=" 確實是 ";
+                        if(ans[arr[i]] == "true"){
+                            str+=" 確實是 " + res[arr[i]]+" .";
                         }
                         else{
-                            str+=" 並非是 ";
+                            str+=" 並非是 " + res[arr[i]] + " 而是 " + lab_file[String("define_"+arr[i])] + " .";
                         }
-                        str +=  res[arr[i]] + ".";
                         alert(str);
                     }
                     alert("檢討完畢");

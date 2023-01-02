@@ -207,7 +207,7 @@
                 else{
                     alert("一共"+lab_file["number"]+"題，您一共答對 "+ans_y+" 題，答錯 "+ans_n+" 題，以下進行檢討");
                     for(let i = 0; i < error_id.length ;i++){
-                        let str = "錯誤"+(i+1)+" , "+lab_file[String("word_"+error_id[i])]+" 的正確定義為 "+lab_file[String("word_"+error_id[i])];
+                        let str = "錯誤"+(i+1)+" , "+lab_file[String("word_"+error_id[i])]+" 的正確定義為 "+lab_file[String("define_"+error_id[i])];
                         str+= " 而非 "+error_input[i]+" .";
                         alert(str);
                     }
