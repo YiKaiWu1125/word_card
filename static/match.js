@@ -3,6 +3,8 @@ let idCount = 0;
 let draggedTarget;
 let dropTarget;
 let have = 0;
+let shiftX;
+let shiftY;
 
 class Pair {
     constructor(word, definition) {
@@ -128,29 +130,48 @@ function registerEventListener() {
 // Code reference: https://www.w3schools.com/howto/howto_js_draggable.asp
 function dragElement(elmnt) {
     /* Move the DIV from anywhere inside the DIV:*/
-    elmnt.addEventListener("drag", drag, false);
-    elmnt.addEventListener("dragover", allowDrop, false);
+    elmnt.addEventListener("dragstart", calculateShift, false);
+    elmnt.addEventListener("drag", () => drag(event, shiftX, shiftY), false);
+    elmnt.addEventListener(
+        "dragend",
+        function () {
+            draggedTarget = null;
+        },
+        false
+    );
+    // elmnt.addEventListener("dragover", allowDrop, false);
     elmnt.addEventListener("drop", drop, false);
 
-    function drag(event) {
+    function calculateShift(event) {
         draggedTarget = event.target;
-        dropTarget = null;
-        event.target.style.top = event.y + "px";
-        event.target.style.left = event.x + "px";
+        shiftX = event.clientX - draggedTarget.getBoundingClientRect().x;
+        shiftY = event.clientY - draggedTarget.getBoundingClientRect().y;
     }
 
-    function drop(ev) {
+    function drag(event, shiftX, shiftY) {
+        dropTarget = null;
+        draggedTarget.style.top = event.clientY - shiftY + "px";
+        draggedTarget.style.left = event.clientX - shiftX + "px";
+    }
+
+    function drop(event) {
+        dropTarget = event.target;
+        event.preventDefault();
         if (checkMatch(draggedTarget, dropTarget)) {
             draggedTarget.remove();
             dropTarget.remove();
             have--;
-            console.log("have"+have);
-            if(have == 0){
-                $("#game").html("<img src = '../static/gamepass.png' class='text-center'/>")
+            console.log("have" + have);
+            if (have == 0) {
+                $("#game").html(
+                    "<img src = '../static/gamepass.png' class='text-center'/>"
+                );
             }
+            draggedTarget = null;
+            dropTarget = null;
         }
 
-        draggedTarget = null;
+        // draggedTarget = null;
     }
 
     function checkMatch(draggedTarget, dropTarget) {
