@@ -84,157 +84,229 @@
             
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary float-right" id="submit">Submit</button>
-
-                
-                
             </form>
-                
+            <div>
+                <hr>
+                <h3> OCR輸入輔助系統</h3>
+                <form id="upload-form" method="post" enctype="multipart/form-data">
+                    辨識語言:
+                    <select class="form-select form-select-lg mb-3 " id="ocr_language"  >
+                        <option value="eng">英文</option>
+                        <option value="cht">中文</option>
+                        <option value="jpn">日文</option>
+                    </select>
+                                   
+                    <input type="file" id="image-file" name="image">
+                    <button type="submit">Submit</button>
+                </form>
+        
+                <!-- Display the OCR result -->
+                <div id="ocr-result"></div>
+
             </div>
-          
-            <!-- Optional JavaScript -->
-            <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-            <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-            <script>
-                let fieldnumber = 1;
-                $(document).ready(start);
-                function start(){
-                    if(localStorage.getItem("word_card_email")== null){
-                        location.href='sign';
-                    }
-                    token_verify();
-                    $("#login_out").on("click", login_out);
-                    // Add field button click handler
-                    $("#addFieldButton").click(function() {
-                        // Clone the last input group
-                        //var $newInputGroup = $(".input-group:last").clone();
-                        // Clear the input fields
-                        //$newInputGroup.find("textarea").val("");
-                        // Append the new input group to the form
-                        let str="";
-                        str += " <div class='input-group mb-3'>                                                                                                   ";        
-                        str += "     <div class='input-group-prepend'>                                                                                            ";               
-                        str += "         <span class='input-group-text' id='messageLabel'>語詞</span>                                                             ";                
-                        str += "     </div>                                                                                                                       ";  
-                        str += "     <textarea class='form-control' name='word_"+fieldnumber+"' rows='3' id='input_word_"+fieldnumber+"' required></textarea>     ";           
-                        str += "     <div class='input-group-prepend'>                                                                                            ";       
-                        str += "         <span class='input-group-text' id='messageLabel'>定義</span>                                                             ";           
-                        str += "     </div>                                                                                                                       ";     
-                        str += "     <textarea class='form-control' name='define_"+fieldnumber+"' rows='3' id='input_define_"+fieldnumber+"' required></textarea> ";          
-                        str += " </div>                                                                                                                           ";      
-                        fieldnumber+=1;
-                        $(".Word").append(str);
-                    });
-                    $("#removeFieldButton").click(function() {
-                        // Remove the last input group if there is more than one
-                        if ($(".input-group").length > 2) {
-                            fieldnumber-=1;
-                            $(".input-group:last").remove();
-                        }
-                    });
-                    $("#translatorButton").click(do_translator);
-                    $("#nameinput").on("blur", name_listen); 
-                    fieldnumber = 1;
+        </div>
+      
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <script>
+            let fieldnumber = 1;
+            $(document).ready(start);
+            function start(){
+                if(localStorage.getItem("word_card_email")== null){
+                    location.href='sign';
                 }
-                $(function() {
-                    $('form').submit(function(e) {
-                        var form = document.getElementById('dynamicForm');
-                        var formData = new FormData(form);
-                        formData = Object.fromEntries(formData);
-                        formData = Object.entries(formData);
-                        formData.push(["email", localStorage.getItem("word_card_email")]);
-                        formData.push(["token", localStorage.getItem("word_card_token")]);
-                        formData.push(["number", String(fieldnumber)]);
-                        formData.push(["time", new Date().toUTCString()]);
-                        formData = Object.fromEntries(formData);
-                        formData = JSON.stringify(formData);
-                        console.log(formData);
-                        e.preventDefault();
-                        $.ajax({
-                            url: "/create_lab",
-                            type: "POST",
-                            contentType: "application/json",
-                            data: formData,
-                            success: function(response) {
-                                if(response["message"] == "true"){
-                                    alert("add successful");
-                                    location.href='/create_set';
-                                }
-                                else{
-                                    alert("error");
-                                }
-                            }
-                        });
-                        // You can also send ajax request to save the form data
-                    });
+                token_verify();
+                $("#login_out").on("click", login_out);
+                // Add field button click handler
+                $("#addFieldButton").click(function() {
+                    // Clone the last input group
+                    //var $newInputGroup = $(".input-group:last").clone();
+                    // Clear the input fields
+                    //$newInputGroup.find("textarea").val("");
+                    // Append the new input group to the form
+                    let str="";
+                    str += " <div class='input-group mb-3'>                                                                                                   ";        
+                    str += "     <div class='input-group-prepend'>                                                                                            ";               
+                    str += "         <span class='input-group-text' id='messageLabel'>語詞</span>                                                             ";                
+                    str += "     </div>                                                                                                                       ";  
+                    str += "     <textarea class='form-control' name='word_"+fieldnumber+"' rows='3' id='input_word_"+fieldnumber+"' required></textarea>     ";           
+                    str += "     <div class='input-group-prepend'>                                                                                            ";       
+                    str += "         <span class='input-group-text' id='messageLabel'>定義</span>                                                             ";           
+                    str += "     </div>                                                                                                                       ";     
+                    str += "     <textarea class='form-control' name='define_"+fieldnumber+"' rows='3' id='input_define_"+fieldnumber+"' required></textarea> ";          
+                    str += " </div>                                                                                                                           ";      
+                    fieldnumber+=1;
+                    $(".Word").append(str);
                 });
-                function login_out(){
+                $("#removeFieldButton").click(function() {
+                    // Remove the last input group if there is more than one
+                    if ($(".input-group").length > 2) {
+                        fieldnumber-=1;
+                        $(".input-group:last").remove();
+                    }
+                });
+                $("#translatorButton").click(do_translator);
+                $("#nameinput").on("blur", name_listen); 
+                fieldnumber = 1;
+            }
+            $(function() {
+                $('#dynamicForm').submit(function(e) {
+                    var form = document.getElementById('dynamicForm');
+                    var formData = new FormData(form);
+                    formData = Object.fromEntries(formData);
+                    formData = Object.entries(formData);
+                    formData.push(["email", localStorage.getItem("word_card_email")]);
+                    formData.push(["token", localStorage.getItem("word_card_token")]);
+                    formData.push(["number", String(fieldnumber)]);
+                    formData.push(["time", new Date().toUTCString()]);
+                    formData = Object.fromEntries(formData);
+                    formData = JSON.stringify(formData);
+                    console.log(formData);
+                    e.preventDefault();
                     $.ajax({
-                        url: "/loginout",
+                        url: "/create_lab",
                         type: "POST",
                         contentType: "application/json",
-                        data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token")}),
-                        success: function(response) {
-                            localStorage.removeItem('word_card_email');
-                            localStorage.removeItem('word_card_token');
-                            location.href='/';
-                        }
-                    });
-                }
-                function name_listen(){
-                    $.ajax({
-                        url: "/have_lab",
-                        type: "POST",
-                        contentType: "application/json",
-                        data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") , 'name' : $('#nameinput').val()}),
+                        data: formData,
                         success: function(response) {
                             if(response["message"] == "true"){
-                                alert("此名lab集已擁有");
-                                $("#submit").removeAttr("style").hide();
+                                alert("add successful");
+                                location.href='/create_set';
                             }
                             else{
-                                $("#submit").show();
+                                alert("error");
                             }
                         }
                     });
-                }
-                function token_verify(){
+                    // You can also send ajax request to save the form data
+                });
+            });
+            function login_out(){
+                $.ajax({
+                    url: "/loginout",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token")}),
+                    success: function(response) {
+                        localStorage.removeItem('word_card_email');
+                        localStorage.removeItem('word_card_token');
+                        location.href='/';
+                    }
+                });
+            }
+            function name_listen(){
+                $.ajax({
+                    url: "/have_lab",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") , 'name' : $('#nameinput').val()}),
+                    success: function(response) {
+                        if(response["message"] == "true"){
+                            alert("此名lab集已擁有");
+                            $("#submit").removeAttr("style").hide();
+                        }
+                        else{
+                            $("#submit").show();
+                        }
+                    }
+                });
+            }
+            function token_verify(){
+                $.ajax({
+                    url: "/token_verify",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") }),
+                    success: function(response) {
+                        if(response["message"]!="true"){
+                            alert("帳號異常，請從新登入");
+                            localStorage.clear();
+                            location.href='/';
+                        }
+                    }
+                });
+            }
+            function do_translator(){
+                alert("開始翻譯");
+                for(let i = 0 ;i < fieldnumber; i++){
+                    let input = $("#input_word_"+i).val();
+                    let language = $("#language").val();
                     $.ajax({
-                        url: "/token_verify",
+                        url: "/translator",
                         type: "POST",
                         contentType: "application/json",
-                        data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") }),
+                        data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") , 'input': input , 'language' : language }),
                         success: function(response) {
                             if(response["message"]!="true"){
-                                alert("帳號異常，請從新登入");
-                                localStorage.clear();
-                                location.href='/';
+                                alert("翻譯發生異常");
+                            }
+                            else{
+                                $("#input_define_"+i).val(response["output"]);   
                             }
                         }
                     });
                 }
-                function do_translator(){
-                    alert("開始翻譯");
-                    for(let i = 0 ;i < fieldnumber; i++){
-                        let input = $("#input_word_"+i).val();
-                        let language = $("#language").val();
-                        $.ajax({
-                            url: "/translator",
-                            type: "POST",
-                            contentType: "application/json",
-                            data: JSON.stringify({ 'email': localStorage.getItem("word_card_email") , 'token': localStorage.getItem("word_card_token") , 'input': input , 'language' : language }),
-                            success: function(response) {
-                                if(response["message"]!="true"){
-                                    alert("翻譯發生異常");
-                                }
-                                else{
-                                    $("#input_define_"+i).val(response["output"]);   
-                                }
-                            }
-                        });
+                alert("翻譯完成");
+            }
+            $(document).ready(function() {
+                // Set the OCR API endpoint and API key
+                var apiEndpoint = 'https://api.ocr.space/parse/image';
+                var apiKey = 'K86266042788957';
+
+                // When the form is submitted
+                $('#upload-form').submit(function(event) {
+                    alert("開始辨識圖片");
+                    // Prevent the form from being submitted
+                    event.preventDefault();
+
+                    // Get the selected image file
+                    var imageFile = $('#image-file')[0].files[0];
+
+                    // Check if the file is an image
+                    if (!imageFile.type.match('image.*')) {
+                        alert('The selected file is not an image.');
+                        return;
                     }
-                    alert("翻譯完成");
-                }
-            </script>
+
+                    var ocrLanguage = $("#ocr_language").val();
+
+                    // Create a new FormData object
+                    var formData = new FormData();
+
+                    // Add the image file to the FormData object
+                    formData.append('file', imageFile);
+                    formData.append("language"   , ocrLanguage);
+                    formData.append("apikey"  , apiKey);
+                    formData.append("isOverlayRequired", "True");
+
+                    // Send the request to the OCR API
+                    $.ajax({
+                        url: apiEndpoint,
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        success: function(response) {
+                            // Check if OCR succeeded
+                            if (response.OCRExitCode == 1) {
+                                // OCR succeeded. Display the OCR text.
+                                $('#ocr-result').text(response.ParsedResults[0].ParsedText);
+                            } else {
+                                // OCR failed. Display an error message.
+                                $('#ocr-result').text('OCR failed. Error: ' + response.ErrorMessage);
+                            }
+                            alert("圖片辨識完成");
+                        },
+                        error: function(response) {
+                            // OCR failed. Display an error message.
+                            $('#ocr-result').text('OCR failed. Error: ' + response.responseText);
+                        }
+                    });
+            });
+        });
+        </script>
     </body>
 </html>
