@@ -3,6 +3,10 @@ let idCount = 0;
 let draggedTarget;
 let dropTarget;
 let have = 0;
+let offsetX;
+let offsetY;
+let shiftX;
+let shiftY;
 
 class Pair {
     constructor(word, definition) {
@@ -76,6 +80,7 @@ function initIcons() {
     }
 
     display();
+    calculateOffset();
     registerEventListener();
 }
 
@@ -124,33 +129,78 @@ function registerEventListener() {
         dragElement(wordItem);
         dragElement(definitionItem);
     }
+
+    document.addEventListener("scroll", calculateOffset, false);
 }
 // Code reference: https://www.w3schools.com/howto/howto_js_draggable.asp
+// Fix issue #20 reference: https://javascript.info/mouse-drag-and-drop
 function dragElement(elmnt) {
     /* Move the DIV from anywhere inside the DIV:*/
-    elmnt.addEventListener("drag", drag, false);
-    elmnt.addEventListener("dragover", allowDrop, false);
+    elmnt.addEventListener("dragstart", calculateShift, false);
+    elmnt.addEventListener(
+        "drag",
+        () => drag(event, shiftX, shiftY, offsetX, offsetY),
+        false
+    );
+    elmnt.addEventListener(
+        "dragend",
+        function () {
+            draggedTarget = null;
+        },
+        false
+    );
+    // elmnt.addEventListener("dragover", allowDrop, false);
     elmnt.addEventListener("drop", drop, false);
 
-    function drag(event) {
+    function calculateShift(event) {
+        /* If condition 1: The last DragEvent screenX and screenY are 0 when mouse drag elements too fast and then discard it.
+        // The reason of choosing screenX is this is not reasonable screenX = 0 while user zoom in the window and drag the element.
+        // If condition 2: The element dragged by user will be the text on the button but not button itself if mouse dragging too fast. 
+        // This moment event.toElement.nodeName will be "#text" object in JavaScript 
+        */
+        if (event.screenX === 0 || event.toElement.nodeName == "#text") {
+            draggedTarget = null;
+            dropTarget = null;
+            return;
+        }
         draggedTarget = event.target;
-        dropTarget = null;
-        event.target.style.top = event.y + "px";
-        event.target.style.left = event.x + "px";
+        shiftX = event.clientX - draggedTarget.getBoundingClientRect().x;
+        shiftY = event.clientY - draggedTarget.getBoundingClientRect().y;
     }
 
-    function drop(ev) {
+    function drag(event, shiftX, shiftY, offsetX, offsetY) {
+        if (event.screenX === 0 || event.toElement.nodeName == "#text") {
+            draggedTarget = null;
+            dropTarget = null;
+            return;
+        }
+
+        dropTarget = null;
+        draggedTarget.style.top = event.clientY - shiftY - offsetY + "px";
+        draggedTarget.style.left = event.clientX - shiftX - offsetX + "px";
+    }
+
+    function drop(event) {
+        if (event.toElement.nodeName == "#text") {
+            return;
+        }
+        dropTarget = event.target;
+        event.preventDefault();
         if (checkMatch(draggedTarget, dropTarget)) {
             draggedTarget.remove();
             dropTarget.remove();
             have--;
-            console.log("have"+have);
-            if(have == 0){
-                $("#game").html("<img src = '../static/gamepass.png' class='text-center'/>")
+            console.log("have" + have);
+            if (have == 0) {
+                $("#game").html(
+                    "<img src = '../static/gamepass.png' class='d-block mx-auto '/>"
+                );
             }
+            draggedTarget = null;
+            dropTarget = null;
         }
 
-        draggedTarget = null;
+        // draggedTarget = null;
     }
 
     function checkMatch(draggedTarget, dropTarget) {
@@ -194,4 +244,9 @@ function dragElement(elmnt) {
 function allowDrop(event) {
     dropTarget = event.target;
     event.preventDefault();
+}
+
+function calculateOffset(event) {
+    offsetX = $("#game").offset().left - window.pageXOffset;
+    offsetY = $("#game").offset().top - window.pageYOffset;
 }
