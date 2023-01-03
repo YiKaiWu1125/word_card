@@ -193,7 +193,7 @@ function dragElement(elmnt) {
             console.log("have" + have);
             if (have == 0) {
                 $("#game").html(
-                    "<img src = '../static/gamepass.png' class='text-center'/>"
+                    "<img src = '../static/gamepass.png' class='d-block mx-auto '/>"
                 );
             }
             draggedTarget = null;
