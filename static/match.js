@@ -48,11 +48,11 @@ function initIcons() {
     for (let i = 0; i < words.length; i++) {
         x = Math.floor(100 + Math.random() * 860);
         y = Math.floor(100 + Math.random() * 600);
-        z = Math.floor(Math.random() * 30);
+        z = 2;
 
         x2 = Math.floor(100 + Math.random() * 860);
         y2 = Math.floor(100 + Math.random() * 600);
-        z2 = Math.floor(Math.random() * 30);
+        z2 = 2;
 
         pairs.push(
             new Pair(
@@ -145,6 +145,10 @@ function dragElement(elmnt) {
     elmnt.addEventListener(
         "dragend",
         function () {
+            if (draggedTarget == null) {
+                return;
+            }
+            $(`#${draggedTarget.id}`).css("z-index", 2);
             draggedTarget = null;
         },
         false
@@ -176,6 +180,7 @@ function dragElement(elmnt) {
         }
 
         dropTarget = null;
+        $(`#${draggedTarget.id}`).css("z-index", 1);
         draggedTarget.style.top = event.clientY - shiftY - offsetY + "px";
         draggedTarget.style.left = event.clientX - shiftX - offsetX + "px";
     }
